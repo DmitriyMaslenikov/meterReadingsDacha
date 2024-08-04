@@ -1,6 +1,6 @@
 import mqtt from 'mqtt';
 
-export const GetMqtt = (request: string) => {
+export const MqttClient = () => {
   const host = process.env.MQTT_HOST;
   const port = process.env.MQTT_PORT;
   const clientId = `mqtt_${Math.random().toString(16).slice(3)}`;
@@ -24,21 +24,22 @@ export const GetMqtt = (request: string) => {
 
     client.subscribe([topicRequest, topicResponse], () => {
       //console.log(`Subscribe to topic '${topicRequest}'`);
-      client.publish(
-        topicRequest,
-        request,
-        // '{"startDay":"2024-04-06", "endDay":"2024-04-15"}',
-        { qos: 0, retain: false },
-        (error) => {
-          if (error) {
-            console.error(error);
-          }
-        },
-      );
+      //   client.publish(
+      //     topicRequest,
+      //     '{"startDay":"2024-04-06", "endDay":"2024-04-17"}',
+      //     { qos: 0, retain: false },
+      //     (error) => {
+      //       if (error) {
+      //         console.error(error);
+      //       }
+      //     },
+      //   );
     });
   });
 
-  const aas = client.on('message', (topicResponse, payload) => {
-    console.log('Received Message:', topicResponse, payload.toString());
-  });
+  //   const aas = client.on('message', (topicResponse, payload) => {
+  //     console.log('Received Message:', topicResponse, payload.toString());
+  //   });
+
+  return client;
 };
