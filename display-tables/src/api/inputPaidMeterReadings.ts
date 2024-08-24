@@ -7,7 +7,7 @@ export function getPaidMeterReadings() {
     .get(`${import.meta.env.VITE_BACKEND_URL}/paidMetersReadings`)
 
     .then(function (response) {
-      //console.log('response789', response.data);
+      // console.log('response789', response);
       return response;
     });
 }

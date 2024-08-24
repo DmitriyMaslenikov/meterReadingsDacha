@@ -49,8 +49,14 @@ const defaultValueContext = {
   indication: indicationsStart,
   indicationsCalculated: indicationsCalculated,
   inputPaidMeterReadings: inputPaidMeterReadings,
+  estimatedPaymentAmount: 0,
+  dayRate: 0,
+  nightRate: 0,
 
   setIndication: (v: IndicationInterface) => {},
+  setEstimatedPaymentAmount: (v: number) => {},
+  setDayRate: (v: number) => {},
+  setNightRate: (v: number) => {},
 };
 const MainPageContext = createContext(defaultValueContext);
 
@@ -61,7 +67,9 @@ export const useMainPage = () => {
 export const MainPageProvider = ({ children }: { children: any }) => {
   const [indication, setIndication] = useState(indicationsStart);
 
-  const [saveData, setSaveData] = useState(false);
+  const [estimatedPaymentAmount, setEstimatedPaymentAmount] = useState(0);
+  const [dayRate, setDayRate] = useState(4.7);
+  const [nightRate, setNightRate] = useState(2.35);
 
   const reducer = (
     state: { visible: boolean; text: string },
@@ -88,33 +96,14 @@ export const MainPageProvider = ({ children }: { children: any }) => {
         indication,
         indicationsCalculated,
         inputPaidMeterReadings,
-        // dayRate,
+        estimatedPaymentAmount,
+        dayRate,
+        nightRate,
 
-        // years,
-        // year,
-        // yearStart,
-        // months,
-        // month,
-        // monthStart,
-        // indicationMonth,
-        // indicationPreviousMonth,
-        // checkMonth,
-        // saveData,
-        // dialogText: state.text,
-        // visibleErrorDialog: errorDialog,
-        // firstOpeningDialogue: firstOpeningDialogue,
-
-        // setYear,
-        // setMonth,
         setIndication,
-        // setDayRate,
-
-        // setCheckMonth,
-        // setSaveData,
-        // show,
-        // hide,
-        // setErrorDialog,
-        // setFirstOpeningDialogue,
+        setEstimatedPaymentAmount,
+        setDayRate,
+        setNightRate,
       }}
     >
       {children}

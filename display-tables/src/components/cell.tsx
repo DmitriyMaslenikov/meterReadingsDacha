@@ -4,9 +4,11 @@ import { useState } from 'react';
 export const Cell = ({
   initialValue,
   setValue,
+  colSpan,
 }: {
   initialValue: number;
   setValue: any;
+  colSpan: number;
 }) => {
   const [inputValue, setInputValue] = useState(false);
 
@@ -17,6 +19,7 @@ export const Cell = ({
       <TableCell
         align="center"
         padding="none"
+        colSpan={colSpan}
         sx={{
           border: 2,
           '&:hover': {
@@ -54,6 +57,7 @@ export const Cell = ({
       <TableCell
         align="center"
         padding="none"
+        colSpan={colSpan}
         onClick={() => {
           setInputValue(true);
         }}

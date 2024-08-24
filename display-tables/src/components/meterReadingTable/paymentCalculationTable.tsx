@@ -5,28 +5,15 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Button,
 } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { Cell } from '../cell';
-import { IndicationInterface } from '../../interfaces/indication';
 import { useMainPage } from '../mainPage/mainPageContext';
-//   import { getIndicationDtek } from '../../api/indications';
-//   import { IndicationDtekDialog } from '../dialog/indicationDtekDialog';
-import { CalculatedMeterReadings } from '../../functions/calculatedMeterReadings';
+import { CalculationOfPaymentIndications } from '../../functions/calculationOfPaymentIndications';
 
 export function PaymentCalculationTable() {
-  console.log('Изменение записи');
+  // console.log('Изменение записи');
   const context = useMainPage();
-  console.log('context ', context.visibleDialog, context.indication);
-  // const [visibleDialog, setVisibleDialog] = useState(false);
-  // const [data, setData] = useState({
-  //   date: '',
-  //   indicationDay: '',
-  //   indicationNight: '',
-  // });
-  const [dayRate, setDayRate] = useState(0);
-  const [nightRate, setNightRate] = useState(0);
 
   useEffect(() => {
     setEnergyMeterReadingsDay(
@@ -45,43 +32,35 @@ export function PaymentCalculationTable() {
     context.indication.energyMeterReadingsNight
   );
 
-  // useEffect(() => {
-  //   const value: number = {
-  //     id: context.indication.id,
-  //     date: '2024-02-01',
-  //     time: '23-00',
-  //     energyMeterReadingsDay: energyMeterReadingsDay,
-  //     energyMeterReadingsNight: energyMeterReadingsNight,
-  //     inputCircuitBreakerEnergy: 0,
-  //   };
-  //   context.setIndication(value);
-  // }, [context.dayRate, energyMeterReadingsNight]);
-
-  // const GetData = async () => {
-  //   const data = (await getIndicationDtek()).data;
-  //   setData(data);
-  //   setVisibleDialog(true);
-  // };
-  // const CloseDialog = () => {
-  //   setVisibleDialog(false);
-  // };
-  // const SaveIndicatin = () => {
-  //   setOrelDay(data.indicationDay);
-  //   setOrelNight(data.indicationNight);
-  //   setVisibleDialog(false);
-  // };
+  const calculatedPaymentAmountDay =
+    Math.round(
+      (Number(context.indication.energyMeterReadingsDay) +
+        Number(context.indicationsCalculated.energyDay) -
+        Number(context.inputPaidMeterReadings.paidMeterReadingsDay)) *
+        context.dayRate *
+        100
+    ) / 100;
+  const calculatedPaymentAmountNight =
+    Math.round(
+      (Number(context.indication.energyMeterReadingsNight) +
+        Number(context.indicationsCalculated.energyNight) -
+        Number(context.inputPaidMeterReadings.paidMeterReadingsNight)) *
+        context.nightRate *
+        100
+    ) / 100;
+  const calculatedPaymentAmount =
+    calculatedPaymentAmountDay + calculatedPaymentAmountNight;
+  const indications = CalculationOfPaymentIndications(
+    context.estimatedPaymentAmount,
+    calculatedPaymentAmountDay,
+    calculatedPaymentAmountNight,
+    context.dayRate,
+    context.nightRate
+  );
+  console.log('indicationDay, indicationNight', indications);
 
   return (
     <>
-      {/* <IndicationDtekDialog
-          data={data}
-          visibleDialog={visibleDialog}
-          CloseDialog={CloseDialog}
-          SaveIndicatin={SaveIndicatin}
-        /> */}
-
-      {/* <Button onClick={GetData}>Получить последнии показания с сайта</Button> */}
-
       <Table
         sx={{
           paddingLeft: '80px',
@@ -172,8 +151,16 @@ export function PaymentCalculationTable() {
               </Typography>
             </TableCell>
 
-            <Cell initialValue={dayRate} setValue={setDayRate} />
-            <Cell initialValue={nightRate} setValue={setNightRate} />
+            <Cell
+              initialValue={context.dayRate}
+              setValue={context.setDayRate}
+              colSpan={1}
+            />
+            <Cell
+              initialValue={context.nightRate}
+              setValue={context.setNightRate}
+              colSpan={1}
+            />
           </TableRow>
           <TableRow>
             <TableCell
@@ -204,10 +191,7 @@ export function PaymentCalculationTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {(Number(context.indication.energyMeterReadingsDay) +
-                  Number(context.indicationsCalculated.energyDay) -
-                  Number(context.inputPaidMeterReadings.paidMeterReadingsDay)) *
-                  dayRate}
+                {calculatedPaymentAmountDay}
               </Typography>
             </TableCell>
             <TableCell
@@ -217,12 +201,7 @@ export function PaymentCalculationTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {(Number(context.indication.energyMeterReadingsNight) +
-                  Number(context.indicationsCalculated.energyNight) -
-                  Number(
-                    context.inputPaidMeterReadings.paidMeterReadingsNight
-                  )) *
-                  nightRate}
+                {calculatedPaymentAmountNight}
               </Typography>
             </TableCell>
           </TableRow>
@@ -256,9 +235,37 @@ export function PaymentCalculationTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {context.inputPaidMeterReadings.paidMeterReadingsNight}
+                {calculatedPaymentAmount}
               </Typography>
             </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                Предполагаемая сумма оплаты
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {context.indicationsCalculated.data}
+              </Typography>
+            </TableCell>
+
+            <Cell
+              initialValue={context.estimatedPaymentAmount}
+              setValue={context.setEstimatedPaymentAmount}
+              colSpan={2}
+            />
           </TableRow>
         </TableBody>
       </Table>

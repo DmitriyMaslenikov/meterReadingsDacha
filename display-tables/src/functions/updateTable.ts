@@ -19,11 +19,11 @@ export const UpdateTable = async () => {
     dateStart.getMonth() + 1
   )}-${AddZero(dateStart.getDate())}`;
 
-  console.log('dateStartStr02.07', dateStartStr);
+  console.log('dateStartStr02.07', dateStartStr, dateStr);
   let indications = await getInputCircuitBreakerEnergys(
     `day||$gte||${dateStartStr}`
   );
-  //   console.log('getInputCircuitBreakerEnergys02.07', indications);
+  console.log('getInputCircuitBreakerEnergys02.07', indications);
   let dateStartMs = 0;
   indications.data.forEach((elem: InputCircuitBreakerEnergyInterface) => {
     const dayMs = Date.parse(`${elem.day} 00:12:00 GMT`);
