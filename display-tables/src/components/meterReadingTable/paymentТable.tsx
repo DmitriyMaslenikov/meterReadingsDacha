@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import {
   Table,
   TableBody,
@@ -8,9 +9,15 @@ import {
 } from '@mui/material';
 
 import { useMainPage } from '../mainPage/mainPageContext';
+import { useReactToPrint } from 'react-to-print';
 
 export function PaymentTable() {
   const context = useMainPage();
+
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   const quantityConsumedEnergyDay =
     context.indicationsForPayment.indicationDay -
@@ -33,6 +40,7 @@ export function PaymentTable() {
           width: '1000px',
         }}
         aria-label="simple table"
+        ref={componentRef}
       >
         <TableHead>
           <TableRow
@@ -117,7 +125,7 @@ export function PaymentTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                Всео к оплате
+                Всего к оплате
               </Typography>
             </TableCell>
           </TableRow>
@@ -296,6 +304,7 @@ export function PaymentTable() {
           </TableRow>
         </TableBody>
       </Table>
+      <button onClick={handlePrint}>Print this table!</button>
     </>
   );
 }
