@@ -105,8 +105,12 @@ export function InputPaidMeterReadingsTable({
               </Typography>
             </TableCell>
 
-            <Cell initialValue={indicationDay} setValue={setIndicationDay} />
-            <Cell initialValue={rateDay} setValue={setRateDay} />
+            <Cell
+              initialValue={indicationDay}
+              setValue={setIndicationDay}
+              colSpan={1}
+            />
+            <Cell initialValue={rateDay} setValue={setRateDay} colSpan={1} />
           </TableRow>
           <TableRow>
             <TableCell
@@ -123,8 +127,13 @@ export function InputPaidMeterReadingsTable({
             <Cell
               initialValue={indicationNight}
               setValue={setIndicationNight}
+              colSpan={1}
             />
-            <Cell initialValue={rateNight} setValue={setRateNight} />
+            <Cell
+              initialValue={rateNight}
+              setValue={setRateNight}
+              colSpan={1}
+            />
           </TableRow>
           <TableRow>
             <TableCell
@@ -138,7 +147,11 @@ export function InputPaidMeterReadingsTable({
               </Typography>
             </TableCell>
 
-            <Cell initialValue={paymentAmount} setValue={setPaymentAmount} />
+            <Cell
+              initialValue={paymentAmount}
+              setValue={setPaymentAmount}
+              colSpan={1}
+            />
           </TableRow>
           <TableRow></TableRow>
         </TableBody>

@@ -18,8 +18,6 @@ export function getInputCircuitBreakerEnergys(filter: string) {
     )
 
     .then(function (response) {
-      console.log('filter', filter, import.meta.env.VITE_BACKEND_URL);
-      console.log('response', response.data);
       return response;
     });
 }

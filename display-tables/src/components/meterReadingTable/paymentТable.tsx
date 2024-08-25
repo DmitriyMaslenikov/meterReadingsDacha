@@ -6,41 +6,22 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
-import { IndicationInterface } from '../../interfaces/indication';
+
 import { useMainPage } from '../mainPage/mainPageContext';
 
-export function MeterReadingsTable() {
+export function PaymentTable() {
   const context = useMainPage();
 
-  useEffect(() => {
-    setEnergyMeterReadingsDay(
-      Number(context.indication.energyMeterReadingsDay)
-    );
-    setEnergyMeterReadingsNight(
-      Number(context.indication.energyMeterReadingsNight)
-    );
-  }, [context.indication]);
-
-  const [energyMeterReadingsDay, setEnergyMeterReadingsDay] = useState(
-    context.indication.energyMeterReadingsDay
-  );
-
-  const [energyMeterReadingsNight, setEnergyMeterReadingsNight] = useState(
-    context.indication.energyMeterReadingsNight
-  );
-
-  useEffect(() => {
-    const value: IndicationInterface = {
-      id: context.indication.id,
-      date: '2024-02-01',
-      time: '23-00',
-      energyMeterReadingsDay: energyMeterReadingsDay,
-      energyMeterReadingsNight: energyMeterReadingsNight,
-      inputCircuitBreakerEnergy: 0,
-    };
-    context.setIndication(value);
-  }, [energyMeterReadingsDay, energyMeterReadingsNight]);
+  const quantityConsumedEnergyDay =
+    context.indicationsForPayment.indicationDay -
+    context.inputPaidMeterReadings.paidMeterReadingsDay;
+  const quantityConsumedEnergyNight =
+    context.indicationsForPayment.indicationNight -
+    context.inputPaidMeterReadings.paidMeterReadingsNight;
+  const sumDay =
+    Math.round(quantityConsumedEnergyDay * context.dayRate * 100) / 100;
+  const sumNight =
+    Math.round(quantityConsumedEnergyNight * context.nightRate * 100) / 100;
 
   return (
     <>
@@ -71,7 +52,7 @@ export function MeterReadingsTable() {
               }}
             >
               <Typography component="h5" variant="h5">
-                Счётчик
+                .
               </Typography>
             </TableCell>
             <TableCell
@@ -88,20 +69,61 @@ export function MeterReadingsTable() {
                 Дата
               </Typography>
             </TableCell>
+
             <TableCell
-              className="qqqqq"
               align="center"
               sx={{
                 border: 2,
-                borderTopColor: 'primary.main',
-                width: '600px',
-                height: '50px',
               }}
             >
-              <Typography component="h5" variant="h5">
-                Время
+              <Typography component="h6" variant="h6">
+                Предыдущие показания
               </Typography>
             </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                Настоящие показания
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                Использовано кВт
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                Цена кВт
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                Всео к оплате
+              </Typography>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
             <TableCell
               align="center"
               sx={{
@@ -119,159 +141,10 @@ export function MeterReadingsTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                Ночь
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Последнии показания счетчика
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indication.date}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indication.time}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indication.energyMeterReadingsDay}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indication.energyMeterReadingsNight}
-              </Typography>
-            </TableCell>
-
-            {/* <Cell
-              initialValue={energyMeterReadingsDay}
-              setValue={setEnergyMeterReadingsDay}
-            />
-
-            <Cell
-              initialValue={energyMeterReadingsNight}
-              setValue={setEnergyMeterReadingsNight}
-            /> */}
-          </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Расчетные показания счетчика
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
                 {context.indicationsCalculated.data}
               </Typography>
             </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.time}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {Number(context.indication.energyMeterReadingsDay) +
-                  Number(context.indicationsCalculated.energyDay)}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {Number(context.indication.energyMeterReadingsNight) +
-                  Number(context.indicationsCalculated.energyNight)}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Оплаченные показания счетчика
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.inputPaidMeterReadings.date}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                -
-              </Typography>
-            </TableCell>
+
             <TableCell
               align="center"
               sx={{
@@ -289,7 +162,135 @@ export function MeterReadingsTable() {
               }}
             >
               <Typography component="h6" variant="h6">
+                {context.indicationsForPayment.indicationDay}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {quantityConsumedEnergyDay}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {context.dayRate}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {sumDay}
+              </Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                Ночь
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {context.indicationsCalculated.data}
+              </Typography>
+            </TableCell>
+
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
                 {context.inputPaidMeterReadings.paidMeterReadingsNight}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {context.indicationsForPayment.indicationNight}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {quantityConsumedEnergyNight}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {context.nightRate}
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {sumNight}
+              </Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell
+              colSpan={2}
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                Общая сумма
+              </Typography>
+            </TableCell>
+
+            <TableCell
+              colSpan={5}
+              align="center"
+              sx={{
+                border: 2,
+              }}
+            >
+              <Typography component="h6" variant="h6">
+                {Math.round((sumDay + sumNight) * 100) / 100}
               </Typography>
             </TableCell>
           </TableRow>

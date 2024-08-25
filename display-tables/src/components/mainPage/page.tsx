@@ -11,6 +11,7 @@ import { MeterReadingsTable } from '../meterReadingTable/meterReadingTable';
 import { InputIndicationDialog } from '../dialog/inputIndicationDialog';
 import { InputPaidMeterReadingsDialog } from '../dialog/inputPaidMeterReadingsDialog';
 import { PaymentCalculationTable } from '../meterReadingTable/paymentCalculationTable';
+import { PaymentTable } from '../meterReadingTable/paymentТable';
 
 export const Page = () => {
   const [visibleDialogIndication, setVisibleDialogIndication] = useState(false);
@@ -25,6 +26,10 @@ export const Page = () => {
   const OpenDialogInputPaidMeterReadings = () => {
     setVisibleDialogInputPaidMeterReadings(true);
   };
+  const [indicationsForPayment, setIndicationsForPayment] = useState({
+    indicationDay: 0,
+    indicationNight: 0,
+  });
 
   return (
     <Container sx={{ paddingLeft: '25px' }}>
@@ -60,6 +65,13 @@ export const Page = () => {
         Открыть диалог для ввода оплаченных показаний
       </Button>
       <PaymentCalculationTable />
+      <Typography variant="h5" component="h2">
+        Таблица показаний для оплаты{' '}
+        {/* {context.months[Number(context.month) - 1].title}{' '}
+          {context.years[Number(context.year) - 1].title} года */}
+      </Typography>
+
+      <PaymentTable />
     </Container>
   );
 };

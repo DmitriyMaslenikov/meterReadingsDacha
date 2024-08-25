@@ -1,5 +1,4 @@
 import { AxiosResponse } from 'axios';
-import { getInputCircuitBreakerEnergys } from '../api/inputCircuitBreakerEnergy';
 import { InputCircuitBreakerEnergyInterface } from '../interfaces/inputCircuitBreakerEnergyInterface';
 export const CalculatedMeterReadings = async (
   indications: AxiosResponse<any, any>,
@@ -42,7 +41,7 @@ export const CalculatedMeterReadings = async (
 
     const key = (dayMs - startDayMs) / oneDay;
     if (key >= 0 && key <= keyAnd) {
-      console.log('elem', elem.day, key);
+      // console.log('elem', elem.day, key);
       indicationsMap.set(key, {
         day: elem.day,
         energyDay: elem.energyDay,
@@ -51,7 +50,7 @@ export const CalculatedMeterReadings = async (
     }
   });
 
-  console.log('indicationsMap.size', indicationsMap, startDay);
+  // console.log('indicationsMap.size', indicationsMap, startDay);
   if (indicationsMap.size === 1) {
     // console.log('periodOfTime', periodOfTime(startTime), periodOfTime(andTime));
     const a = `${periodOfTime(startTime)}-${periodOfTime(andTime)}`;
@@ -98,12 +97,12 @@ export const CalculatedMeterReadings = async (
       case 'day':
         //console.log('Старт   с 7 утра до 23', periodOfTime(startTime));
         energyDay = indicationsMap.get(0).energyNight - startEnergy;
-        console.log(
-          'Day1-1',
-          energyDay,
-          indicationsMap.get(0).energyNight,
-          startEnergy
-        );
+        // console.log(
+        //   'Day1-1',
+        //   energyDay,
+        //   indicationsMap.get(0).energyNight,
+        //   startEnergy
+        // );
         break;
       case 'night2':
         // console.log('Старт  после 23', periodOfTime(startTime));
@@ -111,7 +110,7 @@ export const CalculatedMeterReadings = async (
 
         break;
     }
-    console.log('Day1', energyDay, energyNight);
+    // console.log('Day1', energyDay, energyNight);
     if (indicationsMap.size > 2) {
       for (let i = 1; i < indicationsMap.size - 1; i++) {
         const element = indicationsMap.get(i);
@@ -153,7 +152,7 @@ export const CalculatedMeterReadings = async (
         break;
     }
   }
-  console.log('indicationsMap', indicationsMap, energyDay, energyNight, andDay);
+  // console.log('indicationsMap', indicationsMap, energyDay, energyNight, andDay);
   return {
     data: andDay,
     time: andTime,

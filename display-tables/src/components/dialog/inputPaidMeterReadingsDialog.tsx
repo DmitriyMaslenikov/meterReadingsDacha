@@ -48,7 +48,7 @@ export function InputPaidMeterReadingsDialog({
     setDate(
       `${value.year()}-${strDate(value.month() + 1)}-${strDate(value.date())}`
     );
-    // setTime(`${strDate(value.hour())}:${strDate(value.minute())}`);
+    
   };
 
   const [date, setDate] = React.useState('');
@@ -79,7 +79,7 @@ export function InputPaidMeterReadingsDialog({
       paymentAmount: paymentAmount,
     };
     setPaidMeterReadings(value);
-    console.log('value', value);
+  
   }, [
     paidMeterReadingsDay,
     paidMeterReadingsNight,

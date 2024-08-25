@@ -70,7 +70,6 @@ export function InputIndicationDialog({
       inputCircuitBreakerEnergy: inputCircuitBreakerEnergy,
     };
     setIndication(value);
-    console.log('value', value);
   }, [energyMeterReadingsDay, energyMeterReadingsNight]);
 
   if (!visibleDialog) {

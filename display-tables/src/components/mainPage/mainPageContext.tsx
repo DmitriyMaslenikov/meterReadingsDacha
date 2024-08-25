@@ -20,13 +20,9 @@ const mapIndications = await GetMapIndications(
   inputCircuitBreakerEnergys,
   indicationsStart.date
 );
-console.log(
-  'getInputCircuitBreakerEnergys01.07',
-  inputCircuitBreakerEnergys,
-  mapIndications
-);
+
 const andData = await GetAndData(mapIndications);
-console.log('andData01.07', andData);
+
 const andDay = andData?.day ? andData?.day : '';
 const andTime = andData?.time ? andData?.time : '';
 const andEnergy = andData?.energy ? andData?.energy : 0;
@@ -41,9 +37,6 @@ const indicationsCalculated = await CalculatedMeterReadings(
 );
 const inputPaidMeterReadings = await InputPaidMeterReadings();
 
-console.log('start', indicationsStart);
-console.log('indicationsCalculated', indicationsCalculated);
-
 const defaultValueContext = {
   visibleDialog: true,
   indication: indicationsStart,
@@ -52,11 +45,13 @@ const defaultValueContext = {
   estimatedPaymentAmount: 0,
   dayRate: 0,
   nightRate: 0,
+  indicationsForPayment: { indicationDay: 0, indicationNight: 0 },
 
   setIndication: (v: IndicationInterface) => {},
   setEstimatedPaymentAmount: (v: number) => {},
   setDayRate: (v: number) => {},
   setNightRate: (v: number) => {},
+  setIndicationsForPayment: (v: any) => {},
 };
 const MainPageContext = createContext(defaultValueContext);
 
@@ -70,6 +65,10 @@ export const MainPageProvider = ({ children }: { children: any }) => {
   const [estimatedPaymentAmount, setEstimatedPaymentAmount] = useState(0);
   const [dayRate, setDayRate] = useState(4.7);
   const [nightRate, setNightRate] = useState(2.35);
+  const [indicationsForPayment, setIndicationsForPayment] = useState({
+    indicationDay: 0,
+    indicationNight: 0,
+  });
 
   const reducer = (
     state: { visible: boolean; text: string },
@@ -99,11 +98,13 @@ export const MainPageProvider = ({ children }: { children: any }) => {
         estimatedPaymentAmount,
         dayRate,
         nightRate,
+        indicationsForPayment,
 
         setIndication,
         setEstimatedPaymentAmount,
         setDayRate,
         setNightRate,
+        setIndicationsForPayment,
       }}
     >
       {children}

@@ -12,25 +12,33 @@ import { useMainPage } from '../mainPage/mainPageContext';
 import { CalculationOfPaymentIndications } from '../../functions/calculationOfPaymentIndications';
 
 export function PaymentCalculationTable() {
-  // console.log('Изменение записи');
   const context = useMainPage();
 
   useEffect(() => {
-    setEnergyMeterReadingsDay(
-      Number(context.indication.energyMeterReadingsDay)
-    );
-    setEnergyMeterReadingsNight(
-      Number(context.indication.energyMeterReadingsNight)
-    );
-  }, [context.indication]);
+    const day =
+      Math.round(Number(context.indicationsCalculated.energyDay) * 100) / 100;
 
-  const [energyMeterReadingsDay, setEnergyMeterReadingsDay] = useState(
-    context.indication.energyMeterReadingsDay
-  );
+    const indications: any = CalculationOfPaymentIndications(
+      context.estimatedPaymentAmount,
+      Math.round(
+        Number(
+          context.indicationsCalculated.energyDay +
+            context.inputPaidMeterReadings.paidMeterReadingsDay
+        ) * 100
+      ) / 100,
+      Math.round(
+        Number(
+          context.indicationsCalculated.energyNight +
+            context.inputPaidMeterReadings.paidMeterReadingsNight
+        ) * 100
+      ) / 100,
+      context.dayRate,
+      context.nightRate,
+      context.inputPaidMeterReadings
+    );
 
-  const [energyMeterReadingsNight, setEnergyMeterReadingsNight] = useState(
-    context.indication.energyMeterReadingsNight
-  );
+    context.setIndicationsForPayment(indications);
+  }, [context.estimatedPaymentAmount]);
 
   const calculatedPaymentAmountDay =
     Math.round(
@@ -50,14 +58,6 @@ export function PaymentCalculationTable() {
     ) / 100;
   const calculatedPaymentAmount =
     calculatedPaymentAmountDay + calculatedPaymentAmountNight;
-  const indications = CalculationOfPaymentIndications(
-    context.estimatedPaymentAmount,
-    calculatedPaymentAmountDay,
-    calculatedPaymentAmountNight,
-    context.dayRate,
-    context.nightRate
-  );
-  console.log('indicationDay, indicationNight', indications);
 
   return (
     <>

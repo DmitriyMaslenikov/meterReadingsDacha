@@ -50,7 +50,11 @@ export function EnteringMeterReadingsTable2({
               </Typography>
             </TableCell>
 
-            <Cell initialValue={indicationDay} setValue={setIndicationDay} />
+            <Cell
+              initialValue={indicationDay}
+              setValue={setIndicationDay}
+              colSpan={1}
+            />
           </TableRow>
           <TableRow>
             <TableCell
@@ -67,6 +71,7 @@ export function EnteringMeterReadingsTable2({
             <Cell
               initialValue={indicationNight}
               setValue={setIndicationNight}
+              colSpan={1}
             />
           </TableRow>
         </TableBody>

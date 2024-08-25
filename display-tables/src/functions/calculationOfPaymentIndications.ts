@@ -1,9 +1,12 @@
+import { InputPaidMeterReadingsInterface } from '../interfaces/inputPaidMeterReadingsInterface';
+
 export const CalculationOfPaymentIndications = (
   estimatedPaymentAmount: number,
   calculatedMeterReadingsDay: number,
   calculatedMeterReadingsNight: number,
   calculatedPaymentAmountDay: number,
-  calculatedPaymentAmountNight: number
+  calculatedPaymentAmountNight: number,
+  inputPaidMeterReadings: InputPaidMeterReadingsInterface
 ) => {
   let indicationDay = Math.round(
     (calculatedMeterReadingsDay * estimatedPaymentAmount) /
@@ -19,12 +22,13 @@ export const CalculationOfPaymentIndications = (
     indicationDay * calculatedPaymentAmountDay +
     indicationNight * calculatedPaymentAmountNight;
   const difference = estimatedPaymentAmount - paymentAmount;
-  if (difference > calculatedPaymentAmountNight) {
-    indicationDay += Math.round(difference / calculatedPaymentAmountDay);
-  } else {
-    indicationNight += Math.round(difference / calculatedPaymentAmountNight);
-  }
 
-  console.log('indications', indicationDay, indicationNight, paymentAmount);
-  return { indicationDay, indicationNight };
+  indicationNight += Math.round(difference / calculatedPaymentAmountNight);
+
+  return {
+    indicationDay:
+      indicationDay + Number(inputPaidMeterReadings.paidMeterReadingsDay),
+    indicationNight:
+      indicationNight + Number(inputPaidMeterReadings.paidMeterReadingsNight),
+  };
 };

@@ -1,11 +1,7 @@
 import axios from 'axios';
-import {
-  ChangeIndicationInterface,
-  IndicationInterface,
-} from '../interfaces/indication';
+import { IndicationInterface } from '../interfaces/indication';
 
 export function getIndications(filter: string) {
-  // console.log(23, month, year);
   return axios
     .get(
       `${
@@ -14,7 +10,6 @@ export function getIndications(filter: string) {
     )
 
     .then(function (response) {
-      console.log('response789', response.data);
       return response;
     });
 }
@@ -53,15 +48,3 @@ export function getInputCircuitBreakerEnergy({
     )
     .then((res) => res.data);
 }
-
-// export function getIndicationDtek() {
-//   return axios
-//     .get(
-//       `${
-//         import.meta.env.VITE_BACKEND_URL
-//       }/parsings?company=Orel&dataSupplier=Dtek`
-//     )
-//     .then(function (response) {
-//       return response;
-//     });
-// }
