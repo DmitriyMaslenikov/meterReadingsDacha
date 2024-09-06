@@ -35,7 +35,8 @@ export const Page = () => {
       <Button
         onClick={OpenDialogIndication}
         sx={{
-          border: 4,
+          border: 3,
+          backgroundColor: 'rgb(242, 248, 246)',
           marginLeft: 5,
         }}
       >
@@ -45,7 +46,8 @@ export const Page = () => {
       <Button
         onClick={OpenDialogInputPaidMeterReadings}
         sx={{
-          border: 4,
+          border: 3,
+          backgroundColor: 'rgb(242, 248, 246)',
           marginLeft: 15,
           marginRight: 5,
         }}

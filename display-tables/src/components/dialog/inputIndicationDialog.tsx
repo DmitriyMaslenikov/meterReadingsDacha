@@ -100,10 +100,29 @@ export function InputIndicationDialog({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={SaveIndicatin} autoFocus>
+          <Button
+            onClick={SaveIndicatin}
+            autoFocus
+            sx={{
+              border: 3,
+              backgroundColor: 'rgb(242, 248, 246)',
+              marginLeft: 5,
+              marginRight: 10,
+            }}
+          >
             Записать и закрыть
           </Button>
-          <Button onClick={CloseDialog}>Закрыть диалог</Button>
+          <Button
+            onClick={CloseDialog}
+            sx={{
+              border: 3,
+              backgroundColor: 'rgb(242, 248, 246)',
+              marginLeft: 10,
+              marginRight: 5,
+            }}
+          >
+            Закрыть диалог
+          </Button>
         </DialogActions>
       </Dialog>
     );

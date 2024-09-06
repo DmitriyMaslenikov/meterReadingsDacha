@@ -116,11 +116,35 @@ export function InputPaidMeterReadingsDialog({
             />
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={SaveIndicatin} autoFocus>
+        <DialogActions
+          sx={{
+            marginLeft: 3,
+            marginRight: 10,
+          }}
+        >
+          <Button
+            onClick={SaveIndicatin}
+            autoFocus
+            sx={{
+              border: 3,
+              backgroundColor: 'rgb(242, 248, 246)',
+              marginLeft: 3,
+              marginRight: 8,
+            }}
+          >
             Записать и закрыть
           </Button>
-          <Button onClick={CloseDialog}>Закрыть диалог</Button>
+          <Button
+            onClick={CloseDialog}
+            sx={{
+              border: 3,
+              backgroundColor: 'rgb(242, 248, 246)',
+              marginLeft: 8,
+              marginRight: 3,
+            }}
+          >
+            Закрыть диалог
+          </Button>
         </DialogActions>
       </Dialog>
     );
