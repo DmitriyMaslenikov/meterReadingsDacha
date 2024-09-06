@@ -8,12 +8,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { InputPaidMeterReadingsTable } from '../meterReadingTable/inputPaidMeterReadingsTable';
 import { InputPaidMeterReadingsInterface } from '../../interfaces/inputPaidMeterReadingsInterface';
 import { CreateRowPaidMeterReadings } from '../../functions/createPaidMeterReadings';
-import { GetInputCircuitBreakerEnergy } from '../../functions/getInputCircuitBreakerEnergy';
 
 export function InputPaidMeterReadingsDialog({
   visibleDialog,
@@ -48,7 +46,6 @@ export function InputPaidMeterReadingsDialog({
     setDate(
       `${value.year()}-${strDate(value.month() + 1)}-${strDate(value.date())}`
     );
-    
   };
 
   const [date, setDate] = React.useState('');
@@ -79,7 +76,6 @@ export function InputPaidMeterReadingsDialog({
       paymentAmount: paymentAmount,
     };
     setPaidMeterReadings(value);
-  
   }, [
     paidMeterReadingsDay,
     paidMeterReadingsNight,

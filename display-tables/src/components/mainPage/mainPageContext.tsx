@@ -1,13 +1,13 @@
-import { createContext, useContext, useState, useRef, useReducer } from 'react';
+import { createContext, useContext, useState, useReducer } from 'react';
 import { GetIndicatinStart } from '../../functions/getIndicatinStart';
 import { IndicationInterface } from '../../interfaces/indication';
 import { CalculatedMeterReadings } from '../../functions/calculatedMeterReadings';
 import { InputPaidMeterReadings } from '../../functions/inputPaidMeterReadings';
-import { InputPaidMeterReadingsInterface } from '../../interfaces/inputPaidMeterReadingsInterface';
 import { UpdateTable } from '../../functions/updateTable';
 import { getInputCircuitBreakerEnergys } from '../../api/inputCircuitBreakerEnergy';
 import { GetMapIndications } from '../../functions/getMapIndications';
 import { GetAndData } from '../../functions/getAndData';
+import { IndicationsForPaymentInterface } from '../../interfaces/indicationsForPaymentInterface';
 
 await UpdateTable();
 
@@ -51,7 +51,7 @@ const defaultValueContext = {
   setEstimatedPaymentAmount: (v: number) => {},
   setDayRate: (v: number) => {},
   setNightRate: (v: number) => {},
-  setIndicationsForPayment: (v: any) => {},
+  setIndicationsForPayment: (v: IndicationsForPaymentInterface) => {},
 };
 const MainPageContext = createContext(defaultValueContext);
 

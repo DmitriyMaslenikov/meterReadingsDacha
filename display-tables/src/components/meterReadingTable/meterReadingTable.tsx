@@ -9,6 +9,7 @@ import {
 import { useState, useEffect } from 'react';
 import { IndicationInterface } from '../../interfaces/indication';
 import { useMainPage } from '../mainPage/mainPageContext';
+import styles from './table.module.scss';
 
 export function MeterReadingsTable() {
   const context = useMainPage();
@@ -43,7 +44,7 @@ export function MeterReadingsTable() {
   }, [energyMeterReadingsDay, energyMeterReadingsNight]);
 
   return (
-    <>
+    <div className={styles.table}>
       <Table
         sx={{
           paddingLeft: '80px',
@@ -295,6 +296,6 @@ export function MeterReadingsTable() {
           </TableRow>
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 }

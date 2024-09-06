@@ -4,12 +4,9 @@ import {
   TableCell,
   TableRow,
   Typography,
-  Button,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
+
 import { Cell } from '../cell';
-import { IndicationInterface } from '../../interfaces/indication';
-import { useMainPage } from '../mainPage/mainPageContext';
 
 export function EnteringMeterReadingsTable2({
   indicationDay,

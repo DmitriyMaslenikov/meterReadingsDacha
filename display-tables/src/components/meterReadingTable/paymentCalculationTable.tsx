@@ -6,36 +6,36 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Cell } from '../cell';
 import { useMainPage } from '../mainPage/mainPageContext';
 import { CalculationOfPaymentIndications } from '../../functions/calculationOfPaymentIndications';
+import { IndicationsForPaymentInterface } from '../../interfaces/indicationsForPaymentInterface';
+import styles from './table.module.scss';
 
 export function PaymentCalculationTable() {
   const context = useMainPage();
 
   useEffect(() => {
-    const day =
-      Math.round(Number(context.indicationsCalculated.energyDay) * 100) / 100;
-
-    const indications: any = CalculationOfPaymentIndications(
-      context.estimatedPaymentAmount,
-      Math.round(
-        Number(
-          context.indicationsCalculated.energyDay +
-            context.inputPaidMeterReadings.paidMeterReadingsDay
-        ) * 100
-      ) / 100,
-      Math.round(
-        Number(
-          context.indicationsCalculated.energyNight +
-            context.inputPaidMeterReadings.paidMeterReadingsNight
-        ) * 100
-      ) / 100,
-      context.dayRate,
-      context.nightRate,
-      context.inputPaidMeterReadings
-    );
+    const indications: IndicationsForPaymentInterface =
+      CalculationOfPaymentIndications(
+        context.estimatedPaymentAmount,
+        Math.round(
+          Number(
+            context.indicationsCalculated.energyDay +
+              context.inputPaidMeterReadings.paidMeterReadingsDay
+          ) * 100
+        ) / 100,
+        Math.round(
+          Number(
+            context.indicationsCalculated.energyNight +
+              context.inputPaidMeterReadings.paidMeterReadingsNight
+          ) * 100
+        ) / 100,
+        context.dayRate,
+        context.nightRate,
+        context.inputPaidMeterReadings
+      );
 
     context.setIndicationsForPayment(indications);
   }, [context.estimatedPaymentAmount]);
@@ -57,10 +57,12 @@ export function PaymentCalculationTable() {
         100
     ) / 100;
   const calculatedPaymentAmount =
-    calculatedPaymentAmountDay + calculatedPaymentAmountNight;
+    Math.round(
+      (calculatedPaymentAmountDay + calculatedPaymentAmountNight) * 100
+    ) / 100;
 
   return (
-    <>
+    <div className={styles.table}>
       <Table
         sx={{
           paddingLeft: '80px',
@@ -269,6 +271,6 @@ export function PaymentCalculationTable() {
           </TableRow>
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 }

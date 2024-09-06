@@ -6,10 +6,12 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Button,
 } from '@mui/material';
 
 import { useMainPage } from '../mainPage/mainPageContext';
 import { useReactToPrint } from 'react-to-print';
+import styles from './table.module.scss';
 
 export function PaymentTable() {
   const context = useMainPage();
@@ -31,7 +33,7 @@ export function PaymentTable() {
     Math.round(quantityConsumedEnergyNight * context.nightRate * 100) / 100;
 
   return (
-    <>
+    <div className={styles.table}>
       <Table
         sx={{
           paddingLeft: '80px',
@@ -125,7 +127,7 @@ export function PaymentTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                Всего к оплате
+                Всео к оплате
               </Typography>
             </TableCell>
           </TableRow>
@@ -304,7 +306,18 @@ export function PaymentTable() {
           </TableRow>
         </TableBody>
       </Table>
-      <button onClick={handlePrint}>Print this table!</button>
-    </>
+      <Button
+        onClick={handlePrint}
+        sx={{
+          border: 4,
+          // marginLeft: 15,
+          // marginRight: 5,
+          marginTop: 3,
+        }}
+      >
+        Печать таблицы
+      </Button>{' '}
+      {/* <button onClick={handlePrint}>Print this table!</button> */}
+    </div>
   );
 }

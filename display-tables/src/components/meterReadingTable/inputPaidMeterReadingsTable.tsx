@@ -4,13 +4,10 @@ import {
   TableCell,
   TableRow,
   Typography,
-  Button,
   TableHead,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
+
 import { Cell } from '../cell';
-import { InputPaidMeterReadingsInterface } from '../../interfaces/inputPaidMeterReadingsInterface';
-import { useMainPage } from '../mainPage/mainPageContext';
 
 export function InputPaidMeterReadingsTable({
   indicationDay,
