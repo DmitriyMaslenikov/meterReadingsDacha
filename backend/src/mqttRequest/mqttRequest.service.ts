@@ -28,7 +28,7 @@ export class MqttRequestService {
         break;
 
       case '/energy/days':
-        payload = `{ "startDay":"${data.dateStart}", "endDay":"${data.dateAnd}", "device": "${data.device}"}`;
+        payload = `{ "startDay":"${data.dateStart}", "endDay":"${data.dateAnd}", "device": "${data.device}" , "time": "${data.time}"}`;
         break;
     }
     const pattern = data.topic;

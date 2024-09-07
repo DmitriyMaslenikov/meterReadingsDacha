@@ -309,9 +309,8 @@ export function PaymentTable() {
       <Button
         onClick={handlePrint}
         sx={{
-          border: 4,
-          // marginLeft: 15,
-          // marginRight: 5,
+          border: 3,
+          backgroundColor: 'rgb(242, 248, 246)',
           marginTop: 3,
         }}
       >

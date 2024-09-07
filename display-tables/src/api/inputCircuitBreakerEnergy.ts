@@ -55,6 +55,7 @@ export function updateTable({
   topic: string;
   device: string;
 }) {
+  const time = new Date().getTime();
   return axios
     .post(
       `${import.meta.env.VITE_BACKEND_URL}/mqttRequest`,
@@ -64,6 +65,7 @@ export function updateTable({
         dateStart: dateStart,
         dateAnd: dateAnd,
         device,
+        time,
       }
     )
     .then((res) => res.data);
