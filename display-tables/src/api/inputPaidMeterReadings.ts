@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { InputPaidMeterReadingsInterface } from '../interfaces/inputPaidMeterReadingsInterface';
 
-export function getPaidMeterReadings() {
-  // console.log(23, month, year);
+export function getPaidMeterReadings(filter: string) {
   return axios
-    .get(`${import.meta.env.VITE_BACKEND_URL}/paidMetersReadings`)
+    .get(
+      `${import.meta.env.VITE_BACKEND_URL}/paidMetersReadings?filter=${filter}`
+    )
 
     .then(function (response) {
       // console.log('response789', response);

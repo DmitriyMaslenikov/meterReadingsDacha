@@ -151,7 +151,7 @@ export function PaymentTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.data}
+                {context.indicationsCalculated.date}
               </Typography>
             </TableCell>
 
@@ -224,7 +224,7 @@ export function PaymentTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.data}
+                {context.indicationsCalculated.date}
               </Typography>
             </TableCell>
 
@@ -316,7 +316,6 @@ export function PaymentTable() {
       >
         Печать таблицы
       </Button>{' '}
-      {/* <button onClick={handlePrint}>Print this table!</button> */}
     </div>
   );
 }

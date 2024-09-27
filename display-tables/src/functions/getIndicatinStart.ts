@@ -3,7 +3,7 @@ import { EnergyMeterReadingsInterface } from '../interfaces/energyMeterReadingsI
 import { GetDateStartStr } from './getDateStartStr';
 
 export const GetIndicatinStart = async () => {
-  const dateStart = GetDateStartStr(90);
+  const dateStart = GetDateStartStr(100);
 
   const indication = await getIndications(
     `date||$gt||${dateStart.dateStartStr}`

@@ -18,7 +18,7 @@ export class InputCircuitBreakerEnergyMqttController {
 
   @MessagePattern('/energy/response')
   getNotifications(@Payload() data: any, @Ctx() context: MqttContext) {
-    console.log(`Topic: ${context.getTopic()}`, data);
+    //console.log(`Topic: ${context.getTopic()}`, data);
 
     this.InputCircuitBreakerEnergysMqttService.insert(data);
   }

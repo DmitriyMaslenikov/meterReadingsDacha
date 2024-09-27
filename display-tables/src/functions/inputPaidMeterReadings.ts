@@ -1,8 +1,12 @@
 import { getPaidMeterReadings } from '../api/inputPaidMeterReadings';
 import { InputPaidMeterReadingsInterface } from '../interfaces/inputPaidMeterReadingsInterface';
+import { GetDateStartStr } from './getDateStartStr';
 
 export const InputPaidMeterReadings = async () => {
-  const inputPaidMeterReadings = await getPaidMeterReadings();
+  const dateStart = GetDateStartStr(120);
+  const inputPaidMeterReadings = await getPaidMeterReadings(
+    `date||$gt||${dateStart.dateStartStr}`
+  );
 
   let inputPaidMeterReading: InputPaidMeterReadingsInterface = {
     id: '',
@@ -14,27 +18,25 @@ export const InputPaidMeterReadings = async () => {
     rateNight: 0,
     paymentAmount: 0,
   };
-  // if (indication.data.length !== 0) {
-  //   indication.data.forEach((elem: InputPaidMeterReadingsInterface) => {
-  //     if (
-  //       energyMeterReadings.energyMeterReadingsDay -
-  //         elem.energyMeterReadingsDay <
-  //         0 &&
-  //       energyMeterReadings.energyMeterReadingsNight -
-  //         elem.energyMeterReadingsNight <
-  //         0
-  //     ) {
-  //       energyMeterReadings = {
-  //         id: elem.id,
-  //         date: elem.date,
-  //         time: elem.time,
-  //         energyMeterReadingsDay: elem.energyMeterReadingsDay,
-  //         energyMeterReadingsNight: elem.energyMeterReadingsNight,
-  //         inputCircuitBreakerEnergy: elem.inputCircuitBreakerEnergy,
-  //       };
-  //     }
-  //   });
-  // }
-  //console.log('inputPaidMeterReadings', inputPaidMeterReadings);
-  return inputPaidMeterReadings.data[0];
+  let dateMaxMS = dateStart.daeStarMs;
+  if (inputPaidMeterReadings.data.length !== 0) {
+    inputPaidMeterReadings.data.forEach(
+      (elem: InputPaidMeterReadingsInterface) => {
+        if (Date.parse(`${elem.date} 00:00:00 GMT`) > dateMaxMS) {
+          dateMaxMS = Date.parse(`${elem.date} 00:00:00 GMT`);
+          inputPaidMeterReading = {
+            id: elem.id,
+            date: elem.date,
+            paidMeterReadingsDay: elem.paidMeterReadingsDay,
+            paidMeterReadingsNight: elem.paidMeterReadingsNight,
+            rateDay: elem.rateDay,
+            rateNight: elem.rateNight,
+            paymentAmount: elem.paymentAmount,
+          };
+        }
+      }
+    );
+  }
+
+  return inputPaidMeterReading;
 };

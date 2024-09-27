@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { InputCircuitBreakerEnergyInterface } from '../interfaces/inputCircuitBreakerEnergyInterface';
 
-export const GetMapIndications = async (
+export const GetMapIndications = (
   indications: AxiosResponse<any, any>,
   startDay: string
 ) => {

@@ -53,11 +53,11 @@ export class InputCircuitBreakerEnergysMqttService {
           day: element.day,
         },
       });
-      console.log('today', !(today === element.day), element.day, today);
+      //console.log('today', !(today === element.day), element.day, today);
       if (elementDay.length === 0) {
         element.id = uuidv4();
         this.usersRepository.insert(element);
-        console.log('today2', today === element.day, element.day, today);
+        //console.log('today2', today === element.day, element.day, today);
       } else {
         if (Number(elementDay[0].energyDay) === 0 && element.energyDay) {
           const saveStr = {

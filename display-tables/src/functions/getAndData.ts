@@ -1,6 +1,6 @@
 import { InputCircuitBreakerEnergyInterface } from '../interfaces/inputCircuitBreakerEnergyInterface';
 
-export const GetAndData = async (
+export const GetAndData = (
   indicationsMap: Map<number, InputCircuitBreakerEnergyInterface>
 ) => {
   let data: InputCircuitBreakerEnergyInterface | undefined = indicationsMap.get(

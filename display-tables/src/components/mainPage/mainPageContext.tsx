@@ -1,47 +1,38 @@
-import { createContext, useContext, useState, useReducer } from 'react';
-import { GetIndicatinStart } from '../../functions/getIndicatinStart';
+import { createContext, useContext, useState } from 'react';
 import { IndicationInterface } from '../../interfaces/indication';
-import { CalculatedMeterReadings } from '../../functions/calculatedMeterReadings';
-import { InputPaidMeterReadings } from '../../functions/inputPaidMeterReadings';
-import { UpdateTable } from '../../functions/updateTable';
-import { getInputCircuitBreakerEnergys } from '../../api/inputCircuitBreakerEnergy';
-import { GetMapIndications } from '../../functions/getMapIndications';
-import { GetAndData } from '../../functions/getAndData';
+import { IndicationsCalculatedInterface } from '../../interfaces/indicationsCalculatedInterface';
 import { IndicationsForPaymentInterface } from '../../interfaces/indicationsForPaymentInterface';
+import { InputPaidMeterReadingsInterface } from '../../interfaces/inputPaidMeterReadingsInterface';
 
-await UpdateTable();
+const indicationsStart: IndicationInterface = {
+  date: '2024-01-01',
+  energyMeterReadingsDay: 0,
+  energyMeterReadingsNight: 0,
+  id: '',
+  inputCircuitBreakerEnergy: 0,
+  time: '00:00:00',
+};
 
-const indicationsStart = await GetIndicatinStart();
-
-const inputCircuitBreakerEnergys = await getInputCircuitBreakerEnergys(
-  `day||$gte||${indicationsStart.date}`
-);
-const mapIndications = await GetMapIndications(
-  inputCircuitBreakerEnergys,
-  indicationsStart.date
-);
-
-const andData = await GetAndData(mapIndications);
-
-const andDay = andData?.day ? andData?.day : '';
-const andTime = andData?.time ? andData?.time : '';
-const andEnergy = andData?.energy ? andData?.energy : 0;
-const indicationsCalculated = await CalculatedMeterReadings(
-  inputCircuitBreakerEnergys,
-  indicationsStart.date,
-  andDay,
-  indicationsStart.time,
-  andTime,
-  indicationsStart.inputCircuitBreakerEnergy,
-  andEnergy
-);
-const inputPaidMeterReadings = await InputPaidMeterReadings();
+const indicationsCalculatedStart: IndicationsCalculatedInterface = {
+  date: '2024-01-01',
+  energyDay: 0,
+  energyNight: 0,
+  time: '07:00',
+};
+const inputPaidMeterReadingsStart: InputPaidMeterReadingsInterface = {
+  date: '2024-01-01',
+  id: '',
+  paidMeterReadingsDay: 0,
+  paidMeterReadingsNight: 0,
+  paymentAmount: 0,
+  rateDay: 0,
+  rateNight: 0,
+};
 
 const defaultValueContext = {
-  visibleDialog: true,
   indication: indicationsStart,
-  indicationsCalculated: indicationsCalculated,
-  inputPaidMeterReadings: inputPaidMeterReadings,
+  indicationsCalculated: indicationsCalculatedStart,
+  inputPaidMeterReadings: inputPaidMeterReadingsStart,
   estimatedPaymentAmount: 0,
   dayRate: 0,
   nightRate: 0,
@@ -52,6 +43,8 @@ const defaultValueContext = {
   setDayRate: (v: number) => {},
   setNightRate: (v: number) => {},
   setIndicationsForPayment: (v: IndicationsForPaymentInterface) => {},
+  setInputPaidMeterReadings: (v: InputPaidMeterReadingsInterface) => {},
+  setIndicationsCalculated: (v: IndicationsCalculatedInterface) => {},
 };
 const MainPageContext = createContext(defaultValueContext);
 
@@ -69,29 +62,16 @@ export const MainPageProvider = ({ children }: { children: any }) => {
     indicationDay: 0,
     indicationNight: 0,
   });
-
-  const reducer = (
-    state: { visible: boolean; text: string },
-    action: { type: string; text: string }
-  ) => {
-    switch (action.type) {
-      case 'show':
-        return { ...state, visible: true, text: action.text };
-      case 'hide':
-        return { ...state, visible: false };
-      default:
-        return state;
-    }
-  };
-  const [state, dispatch] = useReducer(reducer, { visible: false, text: '' });
-
-  const show = (text: string) => dispatch({ type: 'show', text });
-  const hide = (text: string) => dispatch({ type: 'hide', text });
+  const [inputPaidMeterReadings, setInputPaidMeterReadings] = useState(
+    inputPaidMeterReadingsStart
+  );
+  const [indicationsCalculated, setIndicationsCalculated] = useState(
+    indicationsCalculatedStart
+  );
 
   return (
     <MainPageContext.Provider
       value={{
-        visibleDialog: state.visible,
         indication,
         indicationsCalculated,
         inputPaidMeterReadings,
@@ -105,6 +85,8 @@ export const MainPageProvider = ({ children }: { children: any }) => {
         setDayRate,
         setNightRate,
         setIndicationsForPayment,
+        setInputPaidMeterReadings,
+        setIndicationsCalculated,
       }}
     >
       {children}

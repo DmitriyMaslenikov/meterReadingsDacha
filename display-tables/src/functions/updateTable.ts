@@ -10,7 +10,6 @@ export const UpdateTable = async () => {
   let indications = await getInputCircuitBreakerEnergys(
     `day||$gte||${dateStartStr}`
   );
-  console.log('indications', indications);
 
   let dateStartMs = 0;
 

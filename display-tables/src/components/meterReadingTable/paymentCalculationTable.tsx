@@ -17,27 +17,30 @@ export function PaymentCalculationTable() {
   const context = useMainPage();
 
   useEffect(() => {
-    const indications: IndicationsForPaymentInterface =
-      CalculationOfPaymentIndications(
-        context.estimatedPaymentAmount,
-        Math.round(
-          Number(
-            context.indicationsCalculated.energyDay +
-              context.inputPaidMeterReadings.paidMeterReadingsDay
-          ) * 100
-        ) / 100,
-        Math.round(
-          Number(
-            context.indicationsCalculated.energyNight +
-              context.inputPaidMeterReadings.paidMeterReadingsNight
-          ) * 100
-        ) / 100,
-        context.dayRate,
-        context.nightRate,
-        context.inputPaidMeterReadings
-      );
+    if (Number(context.estimatedPaymentAmount) !== 0) {
+      const indications: IndicationsForPaymentInterface =
+        CalculationOfPaymentIndications(
+          context.estimatedPaymentAmount,
+          Math.round(
+            Number(
+              context.indicationsCalculated.energyDay +
+                context.inputPaidMeterReadings.paidMeterReadingsDay
+            ) * 100
+          ) / 100,
+          Math.round(
+            Number(
+              context.indicationsCalculated.energyNight +
+                context.inputPaidMeterReadings.paidMeterReadingsNight
+            ) * 100
+          ) / 100,
+          context.dayRate,
+          context.nightRate,
+          context.inputPaidMeterReadings
+        );
+      console.log('indications888888', indications);
 
-    context.setIndicationsForPayment(indications);
+      context.setIndicationsForPayment(indications);
+    }
   }, [context.estimatedPaymentAmount]);
 
   const calculatedPaymentAmountDay =
@@ -149,7 +152,7 @@ export function PaymentCalculationTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.data}
+                {context.indicationsCalculated.date}
               </Typography>
             </TableCell>
 
@@ -182,7 +185,7 @@ export function PaymentCalculationTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.data}
+                {context.indicationsCalculated.date}
               </Typography>
             </TableCell>
 
@@ -225,7 +228,7 @@ export function PaymentCalculationTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.data}
+                {context.indicationsCalculated.date}
               </Typography>
             </TableCell>
 
@@ -259,7 +262,7 @@ export function PaymentCalculationTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.data}
+                {context.indicationsCalculated.date}
               </Typography>
             </TableCell>
 

@@ -1,10 +1,12 @@
 import { Typography, Container, Button, Divider } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MeterReadingsTable } from '../meterReadingTable/meterReadingTable';
 import { InputIndicationDialog } from '../dialog/inputIndicationDialog';
 import { InputPaidMeterReadingsDialog } from '../dialog/inputPaidMeterReadingsDialog';
 import { PaymentCalculationTable } from '../meterReadingTable/paymentCalculationTable';
 import { PaymentTable } from '../meterReadingTable/paymentТable';
+import { useMainPage } from './mainPageContext';
+import { GetIndicatinStart } from '../../functions/getIndicatinStart';
 import styles from './page.module.scss';
 
 export const Page = () => {

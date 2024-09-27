@@ -12,6 +12,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { InputPaidMeterReadingsTable } from '../meterReadingTable/inputPaidMeterReadingsTable';
 import { InputPaidMeterReadingsInterface } from '../../interfaces/inputPaidMeterReadingsInterface';
 import { CreateRowPaidMeterReadings } from '../../functions/createPaidMeterReadings';
+import { useMainPage } from '../mainPage/mainPageContext';
+import { InputPaidMeterReadings } from '../../functions/inputPaidMeterReadings';
 
 export function InputPaidMeterReadingsDialog({
   visibleDialog,
@@ -20,6 +22,7 @@ export function InputPaidMeterReadingsDialog({
   visibleDialog: boolean;
   setVisibleDialog: any;
 }) {
+  const context = useMainPage();
   const strDate = (value: number) => {
     return value / 10 < 1 ? `0${value}` : `${value}`;
   };
@@ -39,6 +42,9 @@ export function InputPaidMeterReadingsDialog({
     setRateDay(0);
     setRateNight(0);
     setPaymentAmount(0);
+    const inputPaidMeterReadings = await InputPaidMeterReadings();
+    console.log('inputPaidMeterReadings', inputPaidMeterReadings);
+    context.setInputPaidMeterReadings(inputPaidMeterReadings);
     setVisibleDialog(false);
   };
 

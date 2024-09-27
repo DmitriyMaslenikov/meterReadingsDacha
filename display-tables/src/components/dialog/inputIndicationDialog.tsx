@@ -13,6 +13,9 @@ import { EnteringMeterReadingsTable2 } from '../meterReadingTable/inputIndicatio
 import { IndicationInterface } from '../../interfaces/indication';
 import { CreateRowIndication } from '../../functions/createIndication';
 import { GetInputCircuitBreakerEnergy } from '../../functions/getInputCircuitBreakerEnergy';
+import { useMainPage } from '../mainPage/mainPageContext';
+import { GetIndicatinStart } from '../../functions/getIndicatinStart';
+import { CalculatedMeterReadings } from '../../functions/calculatedMeterReadings';
 
 export function InputIndicationDialog({
   visibleDialog,
@@ -21,6 +24,8 @@ export function InputIndicationDialog({
   visibleDialog: boolean;
   setVisibleDialog: any;
 }) {
+  const context = useMainPage();
+
   const strDate = (value: number) => {
     return value / 10 < 1 ? `0${value}` : `${value}`;
   };

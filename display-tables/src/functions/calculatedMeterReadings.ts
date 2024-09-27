@@ -1,14 +1,28 @@
-import { AxiosResponse } from 'axios';
 import { InputCircuitBreakerEnergyInterface } from '../interfaces/inputCircuitBreakerEnergyInterface';
+import { GetMapIndications } from './getMapIndications';
+import { GetAndData } from './getAndData';
+import { EnergyMeterReadingsInterface } from '../interfaces/energyMeterReadingsInterface';
+import { getInputCircuitBreakerEnergys } from '../api/inputCircuitBreakerEnergy';
+
 export const CalculatedMeterReadings = async (
-  indications: AxiosResponse<any, any>,
-  startDay: string,
-  andDay: string,
-  startTime: string,
-  andTime: string,
-  startEnergy: number,
-  andEnergy: number
+  indications: EnergyMeterReadingsInterface
 ) => {
+  const startDay: string = indications.date;
+  const startTime: string = indications.time;
+  const startEnergy: number = indications.inputCircuitBreakerEnergy;
+  const inputCircuitBreakerEnergys = await getInputCircuitBreakerEnergys(
+    `day||$gte||${indications.date}`
+  );
+  const mapIndications = GetMapIndications(
+    inputCircuitBreakerEnergys,
+    indications.date
+  );
+  const andData = GetAndData(mapIndications);
+
+  const andDay = andData?.day ? andData?.day : '';
+  const andTime = andData?.time ? andData?.time : '';
+  const andEnergy = andData?.energy ? andData?.energy : 0;
+
   const periodOfTime = (startTime: string) => {
     let ret = '';
     const minute = (time: string) => {
@@ -36,19 +50,21 @@ export const CalculatedMeterReadings = async (
 
   //console.log('getInputCircuitBreakerEnergysAll', indications);
 
-  indications.data.forEach((elem: InputCircuitBreakerEnergyInterface) => {
-    const dayMs = Date.parse(`${elem.day} 00:00:00 GMT`);
+  inputCircuitBreakerEnergys.data.forEach(
+    (elem: InputCircuitBreakerEnergyInterface) => {
+      const dayMs = Date.parse(`${elem.day} 00:00:00 GMT`);
 
-    const key = (dayMs - startDayMs) / oneDay;
-    if (key >= 0 && key <= keyAnd) {
-      // console.log('elem', elem.day, key);
-      indicationsMap.set(key, {
-        day: elem.day,
-        energyDay: elem.energyDay,
-        energyNight: elem.energyNight,
-      });
+      const key = (dayMs - startDayMs) / oneDay;
+      if (key >= 0 && key <= keyAnd) {
+        // console.log('elem', elem.day, key);
+        indicationsMap.set(key, {
+          day: elem.day,
+          energyDay: elem.energyDay,
+          energyNight: elem.energyNight,
+        });
+      }
     }
-  });
+  );
 
   // console.log('indicationsMap.size', indicationsMap, startDay);
   if (indicationsMap.size === 1) {
@@ -154,7 +170,7 @@ export const CalculatedMeterReadings = async (
   }
   // console.log('indicationsMap', indicationsMap, energyDay, energyNight, andDay);
   return {
-    data: andDay,
+    date: andDay,
     time: andTime,
     energyDay: energyDay,
     energyNight: energyNight,

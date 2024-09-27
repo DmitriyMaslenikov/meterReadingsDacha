@@ -6,42 +6,32 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
-import { IndicationInterface } from '../../interfaces/indication';
+import { useEffect } from 'react';
+
+import { IndicationsCalculatedInterface } from '../../interfaces/indicationsCalculatedInterface';
 import { useMainPage } from '../mainPage/mainPageContext';
 import styles from './table.module.scss';
+import { GetIndicatinStart } from '../../functions/getIndicatinStart';
+import { InputPaidMeterReadings } from '../../functions/inputPaidMeterReadings';
+import { UpdateTable } from '../../functions/updateTable';
+import { CalculatedMeterReadings } from '../../functions/calculatedMeterReadings';
 
 export function MeterReadingsTable() {
   const context = useMainPage();
 
   useEffect(() => {
-    setEnergyMeterReadingsDay(
-      Number(context.indication.energyMeterReadingsDay)
-    );
-    setEnergyMeterReadingsNight(
-      Number(context.indication.energyMeterReadingsNight)
-    );
-  }, [context.indication]);
+    (async () => {
+      UpdateTable();
+      const indicationsStart = await GetIndicatinStart();
+      context.setIndication(indicationsStart);
+      const indicationsCalculated: IndicationsCalculatedInterface =
+        await CalculatedMeterReadings(indicationsStart);
 
-  const [energyMeterReadingsDay, setEnergyMeterReadingsDay] = useState(
-    context.indication.energyMeterReadingsDay
-  );
-
-  const [energyMeterReadingsNight, setEnergyMeterReadingsNight] = useState(
-    context.indication.energyMeterReadingsNight
-  );
-
-  useEffect(() => {
-    const value: IndicationInterface = {
-      id: context.indication.id,
-      date: '2024-02-01',
-      time: '23-00',
-      energyMeterReadingsDay: energyMeterReadingsDay,
-      energyMeterReadingsNight: energyMeterReadingsNight,
-      inputCircuitBreakerEnergy: 0,
-    };
-    context.setIndication(value);
-  }, [energyMeterReadingsDay, energyMeterReadingsNight]);
+      context.setIndicationsCalculated(indicationsCalculated);
+      const inputPaidMeterReadings = await InputPaidMeterReadings();
+      context.setInputPaidMeterReadings(inputPaidMeterReadings);
+    })();
+  }, []);
 
   return (
     <div className={styles.table}>
@@ -177,16 +167,6 @@ export function MeterReadingsTable() {
                 {context.indication.energyMeterReadingsNight}
               </Typography>
             </TableCell>
-
-            {/* <Cell
-              initialValue={energyMeterReadingsDay}
-              setValue={setEnergyMeterReadingsDay}
-            />
-
-            <Cell
-              initialValue={energyMeterReadingsNight}
-              setValue={setEnergyMeterReadingsNight}
-            /> */}
           </TableRow>
           <TableRow>
             <TableCell
@@ -206,7 +186,7 @@ export function MeterReadingsTable() {
               }}
             >
               <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.data}
+                {context.indicationsCalculated.date}
               </Typography>
             </TableCell>
             <TableCell
