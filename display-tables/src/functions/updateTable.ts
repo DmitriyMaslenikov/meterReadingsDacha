@@ -6,11 +6,12 @@ import { GetDateStr } from './getDateStr';
 
 export const UpdateTable = async () => {
   const dateStartStr = GetDateStartStr(30).dateStartStr;
+  console.log('dateStartStr', dateStartStr);
 
   let indications = await getInputCircuitBreakerEnergys(
     `day||$gte||${dateStartStr}`
   );
-
+  console.log('indications', indications);
   let dateStartMs = 0;
 
   indications.data.forEach((elem: InputCircuitBreakerEnergyInterface) => {
@@ -18,6 +19,7 @@ export const UpdateTable = async () => {
     dateStartMs = dateStartMs < dayMs ? dayMs : dateStartMs;
   });
   const dateUpdateStart = new Date(dateStartMs);
+  console.log('dateUpdateStart', dateUpdateStart);
 
   const dateUpdateStartStr = GetDateStr(dateUpdateStart);
 

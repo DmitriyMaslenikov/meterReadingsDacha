@@ -1,13 +1,10 @@
-import { Typography, Container, Button, Divider } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { Typography, Container, Button } from '@mui/material';
+import { useState } from 'react';
 import { MeterReadingsTable } from '../meterReadingTable/meterReadingTable';
 import { InputIndicationDialog } from '../dialog/inputIndicationDialog';
 import { InputPaidMeterReadingsDialog } from '../dialog/inputPaidMeterReadingsDialog';
 import { PaymentCalculationTable } from '../meterReadingTable/paymentCalculationTable';
 import { PaymentTable } from '../meterReadingTable/paymentТable';
-import { useMainPage } from './mainPageContext';
-import { GetIndicatinStart } from '../../functions/getIndicatinStart';
-import styles from './page.module.scss';
 
 export const Page = () => {
   const [visibleDialogIndication, setVisibleDialogIndication] = useState(false);

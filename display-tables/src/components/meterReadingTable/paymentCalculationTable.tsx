@@ -37,7 +37,6 @@ export function PaymentCalculationTable() {
           context.nightRate,
           context.inputPaidMeterReadings
         );
-      console.log('indications888888', indications);
 
       context.setIndicationsForPayment(indications);
     }

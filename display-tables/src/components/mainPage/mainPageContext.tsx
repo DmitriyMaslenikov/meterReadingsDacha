@@ -3,6 +3,9 @@ import { IndicationInterface } from '../../interfaces/indication';
 import { IndicationsCalculatedInterface } from '../../interfaces/indicationsCalculatedInterface';
 import { IndicationsForPaymentInterface } from '../../interfaces/indicationsForPaymentInterface';
 import { InputPaidMeterReadingsInterface } from '../../interfaces/inputPaidMeterReadingsInterface';
+import { UpdateTable } from '../../functions/updateTable';
+
+UpdateTable();
 
 const indicationsStart: IndicationInterface = {
   date: '2024-01-01',

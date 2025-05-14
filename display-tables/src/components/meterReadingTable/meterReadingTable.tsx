@@ -13,7 +13,6 @@ import { useMainPage } from '../mainPage/mainPageContext';
 import styles from './table.module.scss';
 import { GetIndicatinStart } from '../../functions/getIndicatinStart';
 import { InputPaidMeterReadings } from '../../functions/inputPaidMeterReadings';
-import { UpdateTable } from '../../functions/updateTable';
 import { CalculatedMeterReadings } from '../../functions/calculatedMeterReadings';
 
 export function MeterReadingsTable() {
@@ -21,7 +20,6 @@ export function MeterReadingsTable() {
 
   useEffect(() => {
     (async () => {
-      UpdateTable();
       const indicationsStart = await GetIndicatinStart();
       context.setIndication(indicationsStart);
       const indicationsCalculated: IndicationsCalculatedInterface =

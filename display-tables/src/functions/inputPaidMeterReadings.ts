@@ -3,7 +3,7 @@ import { InputPaidMeterReadingsInterface } from '../interfaces/inputPaidMeterRea
 import { GetDateStartStr } from './getDateStartStr';
 
 export const InputPaidMeterReadings = async () => {
-  const dateStart = GetDateStartStr(120);
+  const dateStart = GetDateStartStr(250);
   const inputPaidMeterReadings = await getPaidMeterReadings(
     `date||$gt||${dateStart.dateStartStr}`
   );
