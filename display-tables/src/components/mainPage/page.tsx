@@ -58,6 +58,7 @@ export const Page = () => {
         Таблица показаний для оплаты{' '}
       </Typography>
       <PaymentTable />
+      <PaymentTable />
     </Container>
   );
 };
