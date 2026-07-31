@@ -25,6 +25,8 @@ export const CalculationOfPaymentIndications = (
 
   indicationNight += Math.round(difference / calculatedPaymentAmountNight);
 
+  console.log('indicationNight', indicationNight);
+
   return {
     indicationDay:
       indicationDay + Number(inputPaidMeterReadings.paidMeterReadingsDay),

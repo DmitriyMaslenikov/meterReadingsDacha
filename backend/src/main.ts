@@ -38,7 +38,13 @@ async function bootstrap() {
     },
   });
   app.enableCors();
-  await app.startAllMicroservices();
+
+  // HTTP не должен ждать брокер: если MQTT недоступен, API всё равно отдаёт
+  // данные из базы, а подключение к брокеру повторится само (reconnectPeriod).
+  app.startAllMicroservices().catch((error) => {
+    console.error('MQTT недоступен, API работает без него:', error.message);
+  });
+
   await app.listen(3000);
 }
 bootstrap();

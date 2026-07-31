@@ -53,11 +53,22 @@ export class InputCircuitBreakerEnergysMqttService {
           day: element.day,
         },
       });
-      //console.log('today', !(today === element.day), element.day, today);
+      console.log(
+        'today',
+        !(today === element.day),
+        element.day,
+        today,
+        elementDay,
+        elementDay.length === 0 && 0,
+      );
+
       if (elementDay.length === 0) {
-        element.id = uuidv4();
-        this.usersRepository.insert(element);
-        //console.log('today2', today === element.day, element.day, today);
+        console.log('today21', element, element.energyDay);
+        if (element.energyDay) {
+          element.id = uuidv4();
+          this.usersRepository.insert(element);
+          console.log('today2', element);
+        }
       } else {
         if (Number(elementDay[0].energyDay) === 0 && element.energyDay) {
           const saveStr = {
@@ -65,14 +76,15 @@ export class InputCircuitBreakerEnergysMqttService {
             energyDay: element.energyDay,
           };
           this.usersRepository.save(saveStr);
+          console.log('today111', saveStr);
         }
         if (Number(elementDay[0].energyNight) === 0 && element.energyNight) {
-          console.log('today111', today);
           const saveStr = {
             id: elementDay[0].id,
             energyNight: element.energyNight,
           };
           this.usersRepository.save(saveStr);
+          console.log('today112', saveStr);
         }
       }
     });

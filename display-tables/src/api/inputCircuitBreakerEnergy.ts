@@ -22,6 +22,19 @@ export function getInputCircuitBreakerEnergys(filter: string) {
     });
 }
 
+export function getInputCircuitBreakerEnergysRange(
+  dayStart: string,
+  dayEnd: string
+) {
+  return axios
+    .get(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/inputCircuitBreakerEnergy?filter=day||$gte||${dayStart}&filter=day||$lte||${dayEnd}&sort=day,ASC`
+    )
+    .then((response) => response.data);
+}
+
 export function getInputCircuitBreakerEnergy({
   date,
   time,

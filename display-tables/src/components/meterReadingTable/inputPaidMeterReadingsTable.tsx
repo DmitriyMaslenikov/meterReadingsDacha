@@ -1,13 +1,15 @@
 import {
+  Paper,
   Table,
   TableBody,
   TableCell,
-  TableRow,
-  Typography,
   TableHead,
+  TableRow,
 } from '@mui/material';
 
 import { Cell } from '../cell';
+import { RowLabelCell } from '../ui/dataCells';
+import { palette } from '../../theme';
 
 export function InputPaidMeterReadingsTable({
   indicationDay,
@@ -32,76 +34,22 @@ export function InputPaidMeterReadingsTable({
   setRateDay: any;
   setRateNight: any;
 }) {
-  // const context = useMainPage();
-
   return (
-    <>
-      {/* <Button onClick={GetData}>Получить последнии показания с сайта</Button> */}
-      <h2>Таблица ввода оплаченных показаний счетчика</h2>
-      <Table
-        sx={{
-          paddingLeft: '80px',
-          border: 4,
-          borderRadius: 5,
-          width: '500px',
-        }}
-        aria-label="simple table"
-      >
+    <Paper
+      variant="outlined"
+      sx={{ overflow: 'hidden', borderColor: 'divider' }}
+    >
+      <Table size="small" aria-label="Ввод оплаченных показаний счётчика">
         <TableHead>
-          <TableRow
-            sx={{
-              borderBottom: 4,
-              backgroundColor: '#eeeee7',
-            }}
-          >
-            <TableCell
-              className="qqqqq"
-              align="center"
-              sx={{
-                border: 2,
-                borderTopColor: 'primary.main',
-                width: '600px',
-                height: '50px',
-              }}
-            >
-              <Typography component="h5" variant="h5"></Typography>
-            </TableCell>
-
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Показание
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Тариф
-              </Typography>
-            </TableCell>
+          <TableRow>
+            <TableCell>Тариф</TableCell>
+            <TableCell align="right">Показание</TableCell>
+            <TableCell align="right">Цена, ₴</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                День
-              </Typography>
-            </TableCell>
-
+          <TableRow hover>
+            <RowLabelCell accent={palette.day}>День</RowLabelCell>
             <Cell
               initialValue={indicationDay}
               setValue={setIndicationDay}
@@ -109,18 +57,8 @@ export function InputPaidMeterReadingsTable({
             />
             <Cell initialValue={rateDay} setValue={setRateDay} colSpan={1} />
           </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Ночь
-              </Typography>
-            </TableCell>
-
+          <TableRow hover>
+            <RowLabelCell accent={palette.night}>Ночь</RowLabelCell>
             <Cell
               initialValue={indicationNight}
               setValue={setIndicationNight}
@@ -132,27 +70,17 @@ export function InputPaidMeterReadingsTable({
               colSpan={1}
             />
           </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Сумма оплаты
-              </Typography>
-            </TableCell>
-
+          <TableRow hover>
+            <RowLabelCell accent={palette.primary}>Сумма оплаты</RowLabelCell>
             <Cell
               initialValue={paymentAmount}
               setValue={setPaymentAmount}
-              colSpan={1}
+              colSpan={2}
+              unit="₴"
             />
           </TableRow>
-          <TableRow></TableRow>
         </TableBody>
       </Table>
-    </>
+    </Paper>
   );
 }

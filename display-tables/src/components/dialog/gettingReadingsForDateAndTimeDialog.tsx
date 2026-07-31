@@ -15,10 +15,9 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import 'dayjs/locale/ru';
 import { EnteringMeterReadingsTable2 } from '../meterReadingTable/inputIndicationTable';
 import { IndicationInterface } from '../../interfaces/indication';
-import { CreateRowIndication } from '../../functions/createIndication';
 import { GetInputCircuitBreakerEnergy } from '../../functions/getInputCircuitBreakerEnergy';
 
-export function InputIndicationDialog({
+export function GettingReadingsForDateAndTimeDialog({
   visibleDialog,
   setVisibleDialog,
 }: {
@@ -29,16 +28,13 @@ export function InputIndicationDialog({
     return value / 10 < 1 ? `0${value}` : `${value}`;
   };
   const CloseDialog = async () => {
-    setEnergyMeterReadingsDay(0);
-    setEnergyMeterReadingsNight(0);
     setVisibleDialog(false);
   };
   const SaveIndicatin = async () => {
-    await CreateRowIndication(indication);
-    await GetInputCircuitBreakerEnergy('/energy/dayAndTime', date, time);
-    setEnergyMeterReadingsDay(0);
-    setEnergyMeterReadingsNight(0);
     setVisibleDialog(false);
+  };
+  const GetIndicatin = async () => {
+    await GetInputCircuitBreakerEnergy('/energy/dayAndTimeAll', date, time);
   };
 
   const setDateAndTime = (value: any) => {
@@ -82,10 +78,10 @@ export function InputIndicationDialog({
 
   return (
     <Dialog open={visibleDialog} onClose={CloseDialog} fullWidth maxWidth="xs">
-      <DialogTitle>Новые показания счётчика</DialogTitle>
+      <DialogTitle>Показания на дату и время</DialogTitle>
       <DialogContent>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-          Укажите дату и время снятия показаний, затем введите значения.
+          Выберите момент времени и запросите показания счётчика.
         </Typography>
         <Stack spacing={2.5}>
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
@@ -96,6 +92,9 @@ export function InputIndicationDialog({
               slotProps={{ textField: { fullWidth: true, size: 'small' } }}
             />
           </LocalizationProvider>
+          <Button variant="outlined" onClick={GetIndicatin} fullWidth>
+            Получить показания
+          </Button>
           <Box>
             <Typography
               variant="caption"
@@ -121,7 +120,7 @@ export function InputIndicationDialog({
       </DialogContent>
       <DialogActions>
         <Button variant="text" onClick={CloseDialog}>
-          Отмена
+          Закрыть
         </Button>
         <Button variant="contained" onClick={SaveIndicatin} autoFocus>
           Записать

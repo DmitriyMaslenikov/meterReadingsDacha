@@ -27,6 +27,10 @@ export class MqttRequestService {
         payload = `{"date":"${data.date}", "time":"${data.time}", "device": "dinSmartRelay"}`;
         break;
 
+      case '/energy/dayAndTimeAll':
+        payload = `{"date":"${data.date}", "time":"${data.time}"}`;
+        break;
+
       case '/energy/days':
         payload = `{ "startDay":"${data.dateStart}", "endDay":"${data.dateAnd}", "device": "${data.device}" , "time": "${data.time}"}`;
         break;

@@ -1,19 +1,20 @@
-import { log } from 'console';
 import mqtt from 'mqtt';
 
 export const MqttClient = () => {
-  const host = process.env.MQTT_HOST;
-  const port = process.env.MQTT_PORT;
+  const host = 'mqtt://192.168.1.60';
+  const port = '1883';
   const clientId = `mqtt_${Math.random().toString(16).slice(3)}`;
+  console.log(123, clientId);
 
   const connectUrl = `mqtt://${host}:${port}`;
-  console.log(123, connectUrl);
+  console.log(124, connectUrl);
+
   const client = mqtt.connect(connectUrl, {
     clientId,
     clean: true,
     connectTimeout: 4000,
-    username: process.env.MQTT_USER_NAME,
-    password: process.env.MQTT_PASSWORD,
+    username: 'dmitriy',
+    password: '626920847',
     reconnectPeriod: 1000,
   });
 

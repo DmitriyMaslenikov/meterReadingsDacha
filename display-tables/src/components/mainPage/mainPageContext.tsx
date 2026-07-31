@@ -4,8 +4,13 @@ import { IndicationsCalculatedInterface } from '../../interfaces/indicationsCalc
 import { IndicationsForPaymentInterface } from '../../interfaces/indicationsForPaymentInterface';
 import { InputPaidMeterReadingsInterface } from '../../interfaces/inputPaidMeterReadingsInterface';
 import { UpdateTable } from '../../functions/updateTable';
+import { CalculatedEnergyConsumptionForPeriod } from '../../functions/calculatedEnergyConsumptionForPeriod';
+import { MqttClient } from '../../functions/mqttClient';
+// import { GetInputCircuitBreakerEnergy } from '../../functions/getInputCircuitBreakerEnergy';
 
+// MqttClient();
 UpdateTable();
+// await GetInputCircuitBreakerEnergy('/energy/dayAndTime', '2026-01-08', '17:00');
 
 const indicationsStart: IndicationInterface = {
   date: '2024-01-01',
@@ -31,6 +36,13 @@ const inputPaidMeterReadingsStart: InputPaidMeterReadingsInterface = {
   rateDay: 0,
   rateNight: 0,
 };
+const energyConsumptionForPeriodStart = {
+  dateStart: '',
+  dateEnd: '',
+  energyDay: 0,
+  energyNight: 0,
+  paymentАmount: 0,
+};
 
 const defaultValueContext = {
   indication: indicationsStart,
@@ -40,6 +52,7 @@ const defaultValueContext = {
   dayRate: 0,
   nightRate: 0,
   indicationsForPayment: { indicationDay: 0, indicationNight: 0 },
+  energyConsumptionForPeriod: energyConsumptionForPeriodStart,
 
   setIndication: (v: IndicationInterface) => {},
   setEstimatedPaymentAmount: (v: number) => {},
@@ -71,6 +84,9 @@ export const MainPageProvider = ({ children }: { children: any }) => {
   const [indicationsCalculated, setIndicationsCalculated] = useState(
     indicationsCalculatedStart
   );
+  const [energyConsumptionForPeriod, setEnergyConsumptionForPeriod] = useState(
+    energyConsumptionForPeriodStart
+  );
 
   return (
     <MainPageContext.Provider
@@ -82,6 +98,7 @@ export const MainPageProvider = ({ children }: { children: any }) => {
         dayRate,
         nightRate,
         indicationsForPayment,
+        energyConsumptionForPeriod,
 
         setIndication,
         setEstimatedPaymentAmount,

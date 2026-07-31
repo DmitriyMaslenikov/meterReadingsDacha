@@ -37,4 +37,10 @@ export class EnergysMqttController {
       }
     });
   }
+
+  @MessagePattern('/energy/responseDayAndTimeAll')
+  getNotificationsAll(@Payload() data: any, @Ctx() context: MqttContext) {
+    console.log(`Topic: ${context.getTopic()}`, data);
+    return 
+  }
 }

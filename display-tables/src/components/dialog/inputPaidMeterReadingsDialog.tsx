@@ -1,14 +1,18 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import 'dayjs/locale/ru';
 import { InputPaidMeterReadingsTable } from '../meterReadingTable/inputPaidMeterReadingsTable';
 import { InputPaidMeterReadingsInterface } from '../../interfaces/inputPaidMeterReadingsInterface';
 import { CreateRowPaidMeterReadings } from '../../functions/createPaidMeterReadings';
@@ -92,67 +96,60 @@ export function InputPaidMeterReadingsDialog({
 
   if (!visibleDialog) {
     return <></>;
-  } else {
-    return (
-      <Dialog open={visibleDialog} sx={{ border: '50px', color: '#009900' }}>
-        <DialogTitle id="alert-dialog-title" sx={{ color: '#000099' }}>
-          {'Введите показания счетчика, время и дату.'}
-        </DialogTitle>
-        <DialogContent>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DateTimePicker']}>
-              <DatePicker
-                label="Basic date time picker"
-                onChange={setDateAndTime}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-          <DialogContentText id="alert-dialog-description">
-            <InputPaidMeterReadingsTable
-              indicationDay={paidMeterReadingsDay}
-              indicationNight={paidMeterReadingsNight}
-              rateDay={rateDay}
-              rateNight={rateNight}
-              paymentAmount={paymentAmount}
-              setIndicationDay={setPaidMeterReadingsDay}
-              setIndicationNight={setPaidMeterReadingsNight}
-              setRateDay={setRateDay}
-              setRateNight={setRateNight}
-              setPaymentAmount={setPaymentAmount}
-            />
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            marginLeft: 3,
-            marginRight: 10,
-          }}
-        >
-          <Button
-            onClick={SaveIndicatin}
-            autoFocus
-            sx={{
-              border: 3,
-              backgroundColor: 'rgb(242, 248, 246)',
-              marginLeft: 3,
-              marginRight: 8,
-            }}
-          >
-            Записать и закрыть
-          </Button>
-          <Button
-            onClick={CloseDialog}
-            sx={{
-              border: 3,
-              backgroundColor: 'rgb(242, 248, 246)',
-              marginLeft: 8,
-              marginRight: 3,
-            }}
-          >
-            Закрыть диалог
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
   }
+
+  return (
+    <Dialog open={visibleDialog} onClose={CloseDialog} fullWidth maxWidth="sm">
+      <DialogTitle>Оплаченные показания</DialogTitle>
+      <DialogContent>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+          Дата оплаты, показания счётчика на момент оплаты, тарифы и сумма.
+        </Typography>
+        <Stack spacing={2.5}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+            <DatePicker
+              label="Дата оплаты"
+              onChange={setDateAndTime}
+              slotProps={{ textField: { fullWidth: true, size: 'small' } }}
+            />
+          </LocalizationProvider>
+          <Box>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{
+                fontWeight: 600,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Оплаченные показания
+            </Typography>
+            <Box sx={{ mt: 1 }}>
+              <InputPaidMeterReadingsTable
+                indicationDay={paidMeterReadingsDay}
+                indicationNight={paidMeterReadingsNight}
+                rateDay={rateDay}
+                rateNight={rateNight}
+                paymentAmount={paymentAmount}
+                setIndicationDay={setPaidMeterReadingsDay}
+                setIndicationNight={setPaidMeterReadingsNight}
+                setRateDay={setRateDay}
+                setRateNight={setRateNight}
+                setPaymentAmount={setPaymentAmount}
+              />
+            </Box>
+          </Box>
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button variant="text" onClick={CloseDialog}>
+          Отмена
+        </Button>
+        <Button variant="contained" onClick={SaveIndicatin} autoFocus>
+          Записать
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 }

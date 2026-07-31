@@ -1,19 +1,14 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useEffect } from 'react';
 
 import { IndicationsCalculatedInterface } from '../../interfaces/indicationsCalculatedInterface';
 import { useMainPage } from '../mainPage/mainPageContext';
-import styles from './table.module.scss';
 import { GetIndicatinStart } from '../../functions/getIndicatinStart';
 import { InputPaidMeterReadings } from '../../functions/inputPaidMeterReadings';
 import { CalculatedMeterReadings } from '../../functions/calculatedMeterReadings';
+import { CurrentReadings } from '../../functions/paymentTotals';
+import { RowLabelCell, TextCell, ValueCell } from '../ui/dataCells';
+import { palette } from '../../theme';
 
 export function MeterReadingsTable() {
   const context = useMainPage();
@@ -31,249 +26,63 @@ export function MeterReadingsTable() {
     })();
   }, []);
 
+  const currentReadings = CurrentReadings(
+    context.indication,
+    context.indicationsCalculated
+  );
+
+  const rows = [
+    {
+      label: 'Последние показания',
+      accent: palette.muted,
+      date: context.indication.date,
+      time: context.indication.time,
+      day: context.indication.energyMeterReadingsDay,
+      night: context.indication.energyMeterReadingsNight,
+      strong: false,
+    },
+    {
+      label: 'Расчётные показания',
+      accent: palette.primary,
+      date: context.indicationsCalculated.date,
+      time: context.indicationsCalculated.time,
+      day: currentReadings.day,
+      night: currentReadings.night,
+      strong: true,
+    },
+    {
+      label: 'Оплаченные показания',
+      accent: palette.success,
+      date: context.inputPaidMeterReadings.date,
+      time: '',
+      day: context.inputPaidMeterReadings.paidMeterReadingsDay,
+      night: context.inputPaidMeterReadings.paidMeterReadingsNight,
+      strong: false,
+    },
+  ];
+
   return (
-    <div className={styles.table}>
-      <Table
-        sx={{
-          paddingLeft: '80px',
-          border: 4,
-          borderRadius: 5,
-          width: '1000px',
-        }}
-        aria-label="simple table"
-      >
-        <TableHead>
-          <TableRow
-            sx={{
-              borderBottom: 4,
-              backgroundColor: '#eeeee7',
-            }}
-          >
-            <TableCell
-              className="qqqqq"
-              align="center"
-              sx={{
-                border: 2,
-                borderTopColor: 'primary.main',
-                width: '600px',
-                height: '50px',
-              }}
-            >
-              <Typography component="h5" variant="h5">
-                Счётчик
-              </Typography>
-            </TableCell>
-            <TableCell
-              className="qqqqq"
-              align="center"
-              sx={{
-                border: 2,
-                borderTopColor: 'primary.main',
-                width: '600px',
-                height: '50px',
-              }}
-            >
-              <Typography component="h5" variant="h5">
-                Дата
-              </Typography>
-            </TableCell>
-            <TableCell
-              className="qqqqq"
-              align="center"
-              sx={{
-                border: 2,
-                borderTopColor: 'primary.main',
-                width: '600px',
-                height: '50px',
-              }}
-            >
-              <Typography component="h5" variant="h5">
-                Время
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                День
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Ночь
-              </Typography>
-            </TableCell>
+    <Table aria-label="Показания счётчика">
+      <TableHead>
+        <TableRow>
+          <TableCell>Счётчик</TableCell>
+          <TableCell align="right">Дата</TableCell>
+          <TableCell align="right">Время</TableCell>
+          <TableCell align="right">День, кВт·ч</TableCell>
+          <TableCell align="right">Ночь, кВт·ч</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {rows.map((row) => (
+          <TableRow key={row.label} hover>
+            <RowLabelCell accent={row.accent}>{row.label}</RowLabelCell>
+            <TextCell>{row.date}</TextCell>
+            <TextCell>{row.time}</TextCell>
+            <ValueCell value={row.day} strong={row.strong} />
+            <ValueCell value={row.night} strong={row.strong} />
           </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Последнии показания счетчика
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indication.date}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indication.time}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indication.energyMeterReadingsDay}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indication.energyMeterReadingsNight}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Расчетные показания счетчика
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.date}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.time}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {Number(context.indication.energyMeterReadingsDay) +
-                  Number(context.indicationsCalculated.energyDay)}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {Number(context.indication.energyMeterReadingsNight) +
-                  Number(context.indicationsCalculated.energyNight)}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Оплаченные показания счетчика
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.inputPaidMeterReadings.date}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                -
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.inputPaidMeterReadings.paidMeterReadingsDay}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.inputPaidMeterReadings.paidMeterReadingsNight}
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
+        ))}
+      </TableBody>
+    </Table>
   );
 }

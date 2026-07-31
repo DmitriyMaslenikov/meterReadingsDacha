@@ -48,7 +48,7 @@ export const CalculatedMeterReadings = async (
 
   //console.log('dateTime', dateTime);
 
-  //console.log('getInputCircuitBreakerEnergysAll', indications);
+  // console.log('getInputCircuitBreakerEnergysAll', indications);
 
   inputCircuitBreakerEnergys.data.forEach(
     (elem: InputCircuitBreakerEnergyInterface) => {

@@ -10,6 +10,8 @@ export function getIndications(filter: string) {
     )
 
     .then(function (response) {
+      console.log('response', response);
+
       return response;
     });
 }

@@ -1,13 +1,8 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@mui/material';
-// import { useMainPage } from '../mainPage/mainPageContext2';
+import { Paper, Table, TableBody, TableRow } from '@mui/material';
 
 import { Cell } from '../cell';
+import { RowLabelCell } from '../ui/dataCells';
+import { palette } from '../../theme';
 
 export function EnteringMeterReadingsTable2({
   indicationDay,
@@ -20,60 +15,33 @@ export function EnteringMeterReadingsTable2({
   setIndicationDay: any;
   setIndicationNight: any;
 }) {
-  // const context = useMainPage();
-
   return (
-    <>
-      {/* <Button onClick={GetData}>Получить последнии показания с сайта</Button> */}
-      <h2>Таблица ввода показаний счетчика</h2>
-      <Table
-        sx={{
-          paddingLeft: '80px',
-          border: 4,
-          borderRadius: 5,
-          width: '500px',
-        }}
-        aria-label="simple table"
-      >
+    <Paper
+      variant="outlined"
+      sx={{ overflow: 'hidden', borderColor: 'divider' }}
+    >
+      <Table size="small" aria-label="Ввод показаний счётчика">
         <TableBody>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                День
-              </Typography>
-            </TableCell>
-
+          <TableRow hover>
+            <RowLabelCell accent={palette.day}>День</RowLabelCell>
             <Cell
               initialValue={indicationDay}
               setValue={setIndicationDay}
               colSpan={1}
+              unit="кВт·ч"
             />
           </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Ночь
-              </Typography>
-            </TableCell>
-
+          <TableRow hover>
+            <RowLabelCell accent={palette.night}>Ночь</RowLabelCell>
             <Cell
               initialValue={indicationNight}
               setValue={setIndicationNight}
               colSpan={1}
+              unit="кВт·ч"
             />
           </TableRow>
         </TableBody>
       </Table>
-    </>
+    </Paper>
   );
 }

@@ -1,38 +1,29 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { Cell } from '../cell';
 import { useMainPage } from '../mainPage/mainPageContext';
-import { CalculationOfPaymentIndications } from '../../functions/calculationOfPaymentIndications';
+import { CalculationOfPaymentIndications } from '../../functions/calculationOfPaymentIndications2';
 import { IndicationsForPaymentInterface } from '../../interfaces/indicationsForPaymentInterface';
-import styles from './table.module.scss';
+import { CurrentReadings, PaymentTotals } from '../../functions/paymentTotals';
+import { RowLabelCell, TextCell, ValueCell } from '../ui/dataCells';
+import { palette } from '../../theme';
 
 export function PaymentCalculationTable() {
   const context = useMainPage();
 
   useEffect(() => {
     if (Number(context.estimatedPaymentAmount) !== 0) {
+      const readings = CurrentReadings(
+        context.indication,
+        context.indicationsCalculated
+      );
+
       const indications: IndicationsForPaymentInterface =
         CalculationOfPaymentIndications(
           context.estimatedPaymentAmount,
-          Math.round(
-            Number(
-              context.indicationsCalculated.energyDay +
-                context.inputPaidMeterReadings.paidMeterReadingsDay
-            ) * 100
-          ) / 100,
-          Math.round(
-            Number(
-              context.indicationsCalculated.energyNight +
-                context.inputPaidMeterReadings.paidMeterReadingsNight
-            ) * 100
-          ) / 100,
+          Math.round(readings.day * 100) / 100,
+          Math.round(readings.night * 100) / 100,
           context.dayRate,
           context.nightRate,
           context.inputPaidMeterReadings
@@ -42,237 +33,71 @@ export function PaymentCalculationTable() {
     }
   }, [context.estimatedPaymentAmount]);
 
-  const calculatedPaymentAmountDay =
-    Math.round(
-      (Number(context.indication.energyMeterReadingsDay) +
-        Number(context.indicationsCalculated.energyDay) -
-        Number(context.inputPaidMeterReadings.paidMeterReadingsDay)) *
-        context.dayRate *
-        100
-    ) / 100;
-  const calculatedPaymentAmountNight =
-    Math.round(
-      (Number(context.indication.energyMeterReadingsNight) +
-        Number(context.indicationsCalculated.energyNight) -
-        Number(context.inputPaidMeterReadings.paidMeterReadingsNight)) *
-        context.nightRate *
-        100
-    ) / 100;
-  const calculatedPaymentAmount =
-    Math.round(
-      (calculatedPaymentAmountDay + calculatedPaymentAmountNight) * 100
-    ) / 100;
+  const totals = PaymentTotals(
+    context.indication,
+    context.indicationsCalculated,
+    context.inputPaidMeterReadings,
+    context.dayRate,
+    context.nightRate
+  );
 
   return (
-    <div className={styles.table}>
-      <Table
-        sx={{
-          paddingLeft: '80px',
-          border: 4,
-          borderRadius: 5,
-          width: '1000px',
-        }}
-        aria-label="simple table"
-      >
-        <TableHead>
-          <TableRow
-            sx={{
-              borderBottom: 4,
-              backgroundColor: '#eeeee7',
-            }}
-          >
-            <TableCell
-              className="qqqqq"
-              align="center"
-              sx={{
-                border: 2,
-                borderTopColor: 'primary.main',
-                width: '600px',
-                height: '50px',
-              }}
-            >
-              <Typography component="h5" variant="h5">
-                .
-              </Typography>
-            </TableCell>
-            <TableCell
-              className="qqqqq"
-              align="center"
-              sx={{
-                border: 2,
-                borderTopColor: 'primary.main',
-                width: '600px',
-                height: '50px',
-              }}
-            >
-              <Typography component="h5" variant="h5">
-                Дата
-              </Typography>
-            </TableCell>
+    <Table aria-label="Расчёт оплаты">
+      <TableHead>
+        <TableRow>
+          <TableCell>Показатель</TableCell>
+          <TableCell align="right">Дата</TableCell>
+          <TableCell align="right">День</TableCell>
+          <TableCell align="right">Ночь</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow hover>
+          <RowLabelCell accent={palette.muted}>Тариф, ₴/кВт·ч</RowLabelCell>
+          <TextCell>{context.indicationsCalculated.date}</TextCell>
+          <Cell
+            initialValue={context.dayRate}
+            setValue={context.setDayRate}
+            colSpan={1}
+          />
+          <Cell
+            initialValue={context.nightRate}
+            setValue={context.setNightRate}
+            colSpan={1}
+          />
+        </TableRow>
 
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                День
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Ночь
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Тариф
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.date}
-              </Typography>
-            </TableCell>
+        <TableRow hover>
+          <RowLabelCell accent={palette.day}>Расчётная сумма, ₴</RowLabelCell>
+          <TextCell>{context.indicationsCalculated.date}</TextCell>
+          <ValueCell value={totals.amountDay} />
+          <ValueCell value={totals.amountNight} />
+        </TableRow>
 
-            <Cell
-              initialValue={context.dayRate}
-              setValue={context.setDayRate}
-              colSpan={1}
-            />
-            <Cell
-              initialValue={context.nightRate}
-              setValue={context.setNightRate}
-              colSpan={1}
-            />
-          </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Расчетная сумма оплаты
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.date}
-              </Typography>
-            </TableCell>
+        <TableRow
+          sx={{
+            backgroundColor: alpha(palette.primary, 0.06),
+            '& td': { borderTop: `1px solid ${palette.line}` },
+          }}
+        >
+          <RowLabelCell accent={palette.primary}>Общая сумма</RowLabelCell>
+          <TextCell>{context.indicationsCalculated.date}</TextCell>
+          <ValueCell value={totals.amountTotal} unit="₴" strong colSpan={2} />
+        </TableRow>
 
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {calculatedPaymentAmountDay}
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {calculatedPaymentAmountNight}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Общая сумма
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.date}
-              </Typography>
-            </TableCell>
-
-            <TableCell
-              colSpan={2}
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {calculatedPaymentAmount}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                Предполагаемая сумма оплаты
-              </Typography>
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                border: 2,
-              }}
-            >
-              <Typography component="h6" variant="h6">
-                {context.indicationsCalculated.date}
-              </Typography>
-            </TableCell>
-
-            <Cell
-              initialValue={context.estimatedPaymentAmount}
-              setValue={context.setEstimatedPaymentAmount}
-              colSpan={2}
-            />
-          </TableRow>
-        </TableBody>
-      </Table>
-    </div>
+        <TableRow hover>
+          <RowLabelCell accent={palette.night}>
+            Предполагаемая сумма оплаты
+          </RowLabelCell>
+          <TextCell>{context.indicationsCalculated.date}</TextCell>
+          <Cell
+            initialValue={context.estimatedPaymentAmount}
+            setValue={context.setEstimatedPaymentAmount}
+            colSpan={2}
+            unit="₴"
+          />
+        </TableRow>
+      </TableBody>
+    </Table>
   );
 }
