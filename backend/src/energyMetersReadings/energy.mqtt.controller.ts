@@ -1,5 +1,6 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { EnergysMqttService } from './energys.mqtt.service';
+import { MqttResponseService } from '../mqttResponse/mqttResponse.service';
 import {
   MessagePattern,
   EventPattern,
@@ -14,6 +15,7 @@ export class EnergysMqttController {
   constructor(
     private readonly EnergysMqttService: EnergysMqttService,
     @Inject('MQTT_SERVICE') private client: ClientProxy,
+    private readonly mqttResponseService: MqttResponseService,
   ) {}
 
   @MessagePattern('/energy/responseDayAndTime')
@@ -41,6 +43,8 @@ export class EnergysMqttController {
   @MessagePattern('/energy/responseDayAndTimeAll')
   getNotificationsAll(@Payload() data: any, @Ctx() context: MqttContext) {
     console.log(`Topic: ${context.getTopic()}`, data);
-    return 
+    // Ответ приходит асинхронно, поэтому кладём его в хранилище —
+    // браузер забирает его через GET /mqttResponse/dayAndTimeAll.
+    this.mqttResponseService.save('/energy/responseDayAndTimeAll', data);
   }
 }

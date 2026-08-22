@@ -16,10 +16,12 @@ import { InputCircuitBreakerEnergysModule } from './inputCircuitBreakerEnergy/in
 import { InputCircuitBreakerEnergy } from './inputCircuitBreakerEnergy/inputCircuitBreakerEnergy.entity';
 import { PaidMetersReadings } from './paidMeterReadings/paidMeterReadings.entity';
 import { PaidMetersReadingsModule } from './paidMeterReadings/paidMeterReadings.module';
+import { MqttResponseModule } from './mqttResponse/mqttResponse.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    MqttResponseModule,
     EnergysModule,
     EnergyMetersReadingsModule,
     InputCircuitBreakerEnergysModule,

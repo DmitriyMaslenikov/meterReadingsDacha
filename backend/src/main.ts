@@ -45,6 +45,6 @@ async function bootstrap() {
     console.error('MQTT недоступен, API работает без него:', error.message);
   });
 
-  await app.listen(3000);
+  await app.listen(process.env.SERVICE_PORT ?? 3000);
 }
 bootstrap();
