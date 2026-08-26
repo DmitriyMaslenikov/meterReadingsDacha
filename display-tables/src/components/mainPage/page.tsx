@@ -1,4 +1,12 @@
-import { Box, Button, Container, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { MeterReadingsTable } from '../meterReadingTable/meterReadingTable';
 import { InputIndicationDialog } from '../dialog/inputIndicationDialog';
@@ -10,6 +18,7 @@ import { GettingReadingsForDateAndTimeDialog } from '../dialog/gettingReadingsFo
 import { SectionCard } from '../ui/sectionCard';
 import { ConsumptionCalendar } from '../calendar/consumptionCalendar';
 import { Summary } from './summary';
+import { BanyaPage } from '../banya/banyaPage';
 import { useMainPage } from './mainPageContext';
 
 const BoltIcon = () => (
@@ -21,6 +30,7 @@ const BoltIcon = () => (
 export const Page = () => {
   const context = useMainPage();
 
+  const [tab, setTab] = useState(0);
   const [visibleDialogIndication, setVisibleDialogIndication] = useState(false);
   const [
     visibleDialogInputPaidMeterReadings,
@@ -118,10 +128,23 @@ export const Page = () => {
               Обновлено: {context.indication.date} {context.indication.time}
             </Typography>
           </Stack>
+          <Tabs
+            value={tab}
+            onChange={(_, value) => setTab(value)}
+            sx={{ minHeight: 40, '& .MuiTab-root': { minHeight: 40 } }}
+          >
+            <Tab label="Главная" />
+            <Tab label="Баня" />
+          </Tabs>
         </Container>
       </Box>
 
-      <Container maxWidth="lg" sx={{ pt: 4 }}>
+      {tab === 1 && <BanyaPage />}
+
+      <Container
+        maxWidth="lg"
+        sx={{ pt: 4, display: tab === 0 ? 'block' : 'none' }}
+      >
         <Stack spacing={3.5}>
           <Summary />
 

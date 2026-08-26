@@ -3,39 +3,59 @@ import { InputCircuitBreakerEnergyInterface } from '../interfaces/inputCircuitBr
 import { updateTable } from '../api/inputCircuitBreakerEnergy';
 import { GetDateStartStr } from './getDateStartStr';
 import { GetDateStr } from './getDateStr';
+import { getDaysResponse } from '../api/mqttResponse';
+import { WaitForDaysResponse } from './waitForMqttResponse';
 
-export const UpdateTable = async () => {
+/** Устройства, посуточную историю которых добираем у openhab. */
+export const TRACKED_DEVICES = ['inputCircuitBreaker', 'dinSmartRelay'];
+
+/**
+ * Ответ openhab не содержит имени устройства — бэкенд привязывает пришедшие дни
+ * к последнему запрошенному. Поэтому следующий запрос уходит только после того,
+ * как пришёл ответ на предыдущий, иначе серии перемешаются.
+ */
+
+const UpdateDevice = async (device: string) => {
   const dateStartStr = GetDateStartStr(30).dateStartStr;
-  // console.log('dateStartStr', dateStartStr);
 
-  let indications = await getInputCircuitBreakerEnergys(
-    `day||$gte||${dateStartStr}`
+  const indications = await getInputCircuitBreakerEnergys(
+    `day||$gte||${dateStartStr}`,
+    device
   );
-  // console.log('indications', indications);
+
   let dateStartMs = 0;
 
   indications.data.forEach((elem: InputCircuitBreakerEnergyInterface) => {
-    // console.log('elem', elem);
-
     const dayMs = Date.parse(`${elem.day}T00:01:00`);
     dateStartMs = dateStartMs < dayMs ? dayMs : dateStartMs;
   });
-  //  const aa = 24 * 60 * 60 * 1000;
 
-  const dateUpdateStart = new Date(dateStartMs);
-  // console.log('dateUpdateStart', dateUpdateStart);
+  // Если за последний месяц строк нет, начинаем с начала окна, а не с 1970 года.
+  const dateUpdateStartStr =
+    dateStartMs === 0 ? dateStartStr : GetDateStr(new Date(dateStartMs));
 
-  const dateUpdateStartStr = GetDateStr(dateUpdateStart);
-
+  // Конец диапазона не может быть в будущем — openhab такой запрос отклоняет.
   const dateUpdateAndStr = GetDateStartStr(0).dateStartStr;
-  // console.log('dateUpdateAndStr', dateUpdateAndStr, dateUpdateStartStr);
+
+  // Запоминаем предыдущий ответ, чтобы дождаться именно нового.
+  const previous = await getDaysResponse();
 
   await updateTable({
     topic: '/energy/days',
     dateStart: dateUpdateStartStr,
     dateAnd: dateUpdateAndStr,
-    device: 'inputCircuitBreaker',
+    device,
   });
+
+  // openhab отвечает не всегда (например, если данных за период нет),
+  // поэтому ожидание ограничено таймаутом внутри WaitForDaysResponse.
+  return WaitForDaysResponse(previous.receivedAt);
+};
+
+export const UpdateTable = async () => {
+  for (const device of TRACKED_DEVICES) {
+    await UpdateDevice(device);
+  }
 
   return {};
 };

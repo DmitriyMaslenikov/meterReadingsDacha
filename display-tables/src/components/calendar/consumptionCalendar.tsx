@@ -23,7 +23,7 @@ import {
 } from '../../functions/dailyConsumption';
 import { palette } from '../../theme';
 
-const MONTHS = [
+export const MONTHS = [
   'Январь',
   'Февраль',
   'Март',
@@ -210,7 +210,15 @@ const DayCell = ({
   );
 };
 
-export const ConsumptionCalendar = () => {
+export const ConsumptionCalendar = ({
+  device = 'inputCircuitBreaker',
+  title = 'Календарь потребления',
+  subtitle = 'Посуточный расход и стоимость с разбивкой на день и ночь',
+}: {
+  device?: string;
+  title?: string;
+  subtitle?: string;
+} = {}) => {
   const context = useMainPage();
   const now = new Date();
 
@@ -227,7 +235,7 @@ export const ConsumptionCalendar = () => {
     setLoading(true);
     setError('');
 
-    LoadEnergyReadings(year, month)
+    LoadEnergyReadings(year, month, device)
       .then((loaded) => {
         if (actual) {
           setReadings(loaded);
@@ -252,7 +260,7 @@ export const ConsumptionCalendar = () => {
     return () => {
       actual = false;
     };
-  }, [year, month]);
+  }, [year, month, device, context.dataVersion]);
 
   const days = useMemo(
     () =>
@@ -291,8 +299,8 @@ export const ConsumptionCalendar = () => {
 
   return (
     <SectionCard
-      title="Календарь потребления"
-      subtitle="Посуточный расход и стоимость с разбивкой на день и ночь"
+      title={title}
+      subtitle={subtitle}
       actions={
         <Stack direction="row" alignItems="center" spacing={1}>
           <IconButton

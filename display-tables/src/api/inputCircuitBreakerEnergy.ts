@@ -9,12 +9,15 @@ export function getInputCircuitBreakerEnergysAll() {
       return response;
     });
 }
-export function getInputCircuitBreakerEnergys(filter: string) {
+export function getInputCircuitBreakerEnergys(
+  filter: string,
+  device = 'inputCircuitBreaker'
+) {
   return axios
     .get(
       `${
         import.meta.env.VITE_BACKEND_URL
-      }/inputCircuitBreakerEnergy?filter=${filter}`
+      }/inputCircuitBreakerEnergy?filter=${filter}&filter=device||$eq||${device}`
     )
 
     .then(function (response) {
@@ -24,13 +27,14 @@ export function getInputCircuitBreakerEnergys(filter: string) {
 
 export function getInputCircuitBreakerEnergysRange(
   dayStart: string,
-  dayEnd: string
+  dayEnd: string,
+  device = 'inputCircuitBreaker'
 ) {
   return axios
     .get(
       `${
         import.meta.env.VITE_BACKEND_URL
-      }/inputCircuitBreakerEnergy?filter=day||$gte||${dayStart}&filter=day||$lte||${dayEnd}&sort=day,ASC`
+      }/inputCircuitBreakerEnergy?filter=day||$gte||${dayStart}&filter=day||$lte||${dayEnd}&filter=device||$eq||${device}&sort=day,ASC`
     )
     .then((response) => response.data);
 }

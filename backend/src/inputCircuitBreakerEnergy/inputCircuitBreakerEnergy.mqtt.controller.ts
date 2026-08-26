@@ -1,5 +1,6 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { InputCircuitBreakerEnergysMqttService } from './inputCircuitBreakerEnergy.mqtt.service';
+import { MqttResponseService } from '../mqttResponse/mqttResponse.service';
 import {
   MessagePattern,
   EventPattern,
@@ -14,6 +15,7 @@ export class InputCircuitBreakerEnergyMqttController {
   constructor(
     private readonly InputCircuitBreakerEnergysMqttService: InputCircuitBreakerEnergysMqttService,
     @Inject('MQTT_SERVICE') private client: ClientProxy,
+    private readonly mqttResponseService: MqttResponseService,
   ) {}
 
   @MessagePattern('/energy/response')
@@ -21,5 +23,7 @@ export class InputCircuitBreakerEnergyMqttController {
     console.log(`Topic: ${context.getTopic()}`, data);
 
     this.InputCircuitBreakerEnergysMqttService.insert(data);
+    // Отмечаем приход ответа, чтобы фронтенд знал, когда перечитывать данные.
+    this.mqttResponseService.save('/energy/response', data);
   }
 }

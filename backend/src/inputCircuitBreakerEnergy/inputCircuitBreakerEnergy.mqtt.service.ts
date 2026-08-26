@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InputCircuitBreakerEnergy } from './inputCircuitBreakerEnergy.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { LastRequestedDeviceService } from '../mqttResponse/lastRequestedDevice.service';
 
 @Injectable()
 export class InputCircuitBreakerEnergysMqttService {
   constructor(
     @InjectRepository(InputCircuitBreakerEnergy)
     private usersRepository: Repository<InputCircuitBreakerEnergy>,
+    private readonly lastRequestedDevice: LastRequestedDeviceService,
   ) {}
 
   findAll(): Promise<InputCircuitBreakerEnergy[]> {
@@ -48,9 +50,14 @@ export class InputCircuitBreakerEnergysMqttService {
     const today = `${year}-${addZero(month)}-${addZero(dayOfMonth)}`;
 
     data.forEach(async (element) => {
+      // Ответ может не содержать устройство — тогда берём последнее запрошенное.
+      const device = element.device ?? this.lastRequestedDevice.get();
+      element.device = device;
+
       const elementDay = await this.usersRepository.find({
         where: {
           day: element.day,
+          device: device,
         },
       });
       console.log(

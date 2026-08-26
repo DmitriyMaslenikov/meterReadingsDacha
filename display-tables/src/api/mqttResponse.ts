@@ -6,6 +6,12 @@ export interface MqttResponseInterface {
   payload: any;
 }
 
+export function getDaysResponse(): Promise<MqttResponseInterface> {
+  return axios
+    .get(`${import.meta.env.VITE_BACKEND_URL}/mqttResponse/days`)
+    .then((response) => response.data);
+}
+
 export function getDayAndTimeAllResponse(): Promise<MqttResponseInterface> {
   return axios
     .get(`${import.meta.env.VITE_BACKEND_URL}/mqttResponse/dayAndTimeAll`)

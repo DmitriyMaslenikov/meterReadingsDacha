@@ -43,14 +43,18 @@ export const FirstWeekdayOfMonth = (year: number, month: number) =>
  * Показания за месяц плюс первое число следующего — оно нужно,
  * чтобы закрыть ночь последнего дня месяца.
  */
-export const LoadEnergyReadings = async (year: number, month: number) => {
+export const LoadEnergyReadings = async (
+  year: number,
+  month: number,
+  device = 'inputCircuitBreaker'
+) => {
   const dayStart = DateStr(year, month, 1);
   const nextMonth = month === 12 ? 1 : month + 1;
   const nextYear = month === 12 ? year + 1 : year;
   const dayEnd = DateStr(nextYear, nextMonth, 1);
 
   const rows: InputCircuitBreakerEnergyInterface[] =
-    await getInputCircuitBreakerEnergysRange(dayStart, dayEnd);
+    await getInputCircuitBreakerEnergysRange(dayStart, dayEnd, device);
 
   const readings = new Map<string, EnergyReading>();
   rows.forEach((row) => {

@@ -9,4 +9,9 @@ export class MqttResponseController {
   getDayAndTimeAll() {
     return this.mqttResponseService.get('/energy/responseDayAndTimeAll');
   }
+
+  @Get('days')
+  getDays() {
+    return this.mqttResponseService.get('/energy/response');
+  }
 }

@@ -24,7 +24,7 @@ export function MeterReadingsTable() {
       const inputPaidMeterReadings = await InputPaidMeterReadings();
       context.setInputPaidMeterReadings(inputPaidMeterReadings);
     })();
-  }, []);
+  }, [context.dataVersion]);
 
   const currentReadings = CurrentReadings(
     context.indication,

@@ -16,6 +16,14 @@ export class InputCircuitBreakerEnergy {
     // transformer: new DecimalTransformer(),
   })
   day: Date;
+
+  /**
+   * Устройство, к которому относится строка. Раньше таблица хранила только
+   * вводной автомат, поэтому это значение — умолчание для старых строк.
+   */
+  @Column({ default: 'inputCircuitBreaker' })
+  device: string;
+
   @Column({
     type: 'decimal',
     precision: 10,

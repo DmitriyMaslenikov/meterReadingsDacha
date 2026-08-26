@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { IndicationInterface } from '../../interfaces/indication';
 import { IndicationsCalculatedInterface } from '../../interfaces/indicationsCalculatedInterface';
 import { IndicationsForPaymentInterface } from '../../interfaces/indicationsForPaymentInterface';
@@ -9,7 +9,11 @@ import { MqttClient } from '../../functions/mqttClient';
 // import { GetInputCircuitBreakerEnergy } from '../../functions/getInputCircuitBreakerEnergy';
 
 // MqttClient();
-UpdateTable();
+
+// Добор данных запускается один раз на загрузку страницы. Флаг нужен из-за
+// StrictMode: в разработке эффекты монтирования выполняются дважды, а два
+// параллельных прохода перемешали бы серии устройств.
+let updateStarted = false;
 // await GetInputCircuitBreakerEnergy('/energy/dayAndTime', '2026-01-08', '17:00');
 
 const indicationsStart: IndicationInterface = {
@@ -53,6 +57,8 @@ const defaultValueContext = {
   nightRate: 0,
   indicationsForPayment: { indicationDay: 0, indicationNight: 0 },
   energyConsumptionForPeriod: energyConsumptionForPeriodStart,
+  /** Растёт после того, как openhab прислал новые дни: сигнал перечитать данные. */
+  dataVersion: 0,
 
   setIndication: (v: IndicationInterface) => {},
   setEstimatedPaymentAmount: (v: number) => {},
@@ -87,6 +93,16 @@ export const MainPageProvider = ({ children }: { children: any }) => {
   const [energyConsumptionForPeriod, setEnergyConsumptionForPeriod] = useState(
     energyConsumptionForPeriodStart
   );
+  const [dataVersion, setDataVersion] = useState(0);
+
+  useEffect(() => {
+    if (updateStarted) {
+      return;
+    }
+    updateStarted = true;
+
+    UpdateTable().finally(() => setDataVersion((version) => version + 1));
+  }, []);
 
   return (
     <MainPageContext.Provider
@@ -99,6 +115,7 @@ export const MainPageProvider = ({ children }: { children: any }) => {
         nightRate,
         indicationsForPayment,
         energyConsumptionForPeriod,
+        dataVersion,
 
         setIndication,
         setEstimatedPaymentAmount,
