@@ -139,6 +139,7 @@ export const Page = () => {
             <Tab label="Розетка 2" />
             <Tab label="Розетка 3" />
             <Tab label="Спальня" />
+            <Tab label="Кухня" />
           </Tabs>
         </Container>
       </Box>
@@ -192,6 +193,16 @@ export const Page = () => {
           meterTitle="Обогрев спальни"
           meterLabel="Реле обогрева спальня"
           calendarTitle="Календарь потребления обогрева спальни"
+        />
+      )}
+
+      {tab === 6 && (
+        <DevicePage
+          device="kitchenHeatingRelayEnergy"
+          channel="energy7"
+          meterTitle="Обогрев кухни"
+          meterLabel="Реле обогрева кухня"
+          calendarTitle="Календарь потребления обогрева кухни"
         />
       )}
 

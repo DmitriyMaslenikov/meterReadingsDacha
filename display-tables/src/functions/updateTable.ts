@@ -14,6 +14,7 @@ export const TRACKED_DEVICES = [
   'smartPlug2Energy',
   'smartPlug3Energy',
   'bedroomHeatingRelayEnergy',
+  'kitchenHeatingRelayEnergy',
 ];
 
 /**
