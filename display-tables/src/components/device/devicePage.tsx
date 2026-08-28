@@ -12,22 +12,23 @@ import {
 import { SectionCard } from '../ui/sectionCard';
 import { ConsumptionCalendar, MONTHS } from '../calendar/consumptionCalendar';
 import { StatTile } from '../ui/statTile';
-import { FormatNumber } from '../ui/dataCells';
+import {
+  FormatNumber,
+  RowLabelCell,
+  TextCell,
+  ValueCell,
+} from '../ui/dataCells';
 import { useMainPage } from '../mainPage/mainPageContext';
 import {
   DailyConsumption,
   LoadEnergyReadings,
   MonthTotals,
 } from '../../functions/dailyConsumption';
-import { RowLabelCell, ValueCell, TextCell } from '../ui/dataCells';
 import {
-  CHANNEL_BANYA,
   NowDateAndTime,
   RequestChannelReading,
 } from '../../functions/requestChannelReading';
 import { palette } from '../../theme';
-
-const BANYA_DEVICE = 'dinSmartRelay';
 
 const EMPTY_TOTALS = {
   energyDay: 0,
@@ -37,7 +38,26 @@ const EMPTY_TOTALS = {
   daysWithData: 0,
 };
 
-export const BanyaPage = () => {
+/**
+ * Страница одного потребителя: итоги месяца, текущее показание по запросу
+ * к openhab и посуточный календарь. Отличаются только устройство, канал
+ * в ответе прибора и подписи.
+ */
+export const DevicePage = ({
+  device,
+  channel,
+  meterTitle,
+  meterLabel,
+  calendarTitle,
+}: {
+  /** Имя устройства для /energy/days и фильтра в базе. */
+  device: string;
+  /** Ключ канала в ответе /energy/responseDayAndTimeAll. */
+  channel: string;
+  meterTitle: string;
+  meterLabel: string;
+  calendarTitle: string;
+}) => {
   const context = useMainPage();
   const now = new Date();
   const year = now.getFullYear();
@@ -58,7 +78,7 @@ export const BanyaPage = () => {
       const value = await RequestChannelReading(
         moment.date,
         moment.time,
-        CHANNEL_BANYA
+        channel
       );
       if (value === null) {
         setError('Прибор не ответил на запрос текущего показания.');
@@ -79,13 +99,13 @@ export const BanyaPage = () => {
 
   useEffect(() => {
     LoadCurrent();
-  }, []);
+  }, [device]);
 
   // Итоги текущего месяца для плиток — те же расчёты, что и в календаре.
   useEffect(() => {
     let actual = true;
 
-    LoadEnergyReadings(year, month, BANYA_DEVICE)
+    LoadEnergyReadings(year, month, device)
       .then((readings) => {
         if (!actual) {
           return;
@@ -108,7 +128,14 @@ export const BanyaPage = () => {
     return () => {
       actual = false;
     };
-  }, [year, month, context.dayRate, context.nightRate, context.dataVersion]);
+  }, [
+    device,
+    year,
+    month,
+    context.dayRate,
+    context.nightRate,
+    context.dataVersion,
+  ]);
 
   const amountDay = Math.round(totals.energyDay * context.dayRate * 100) / 100;
   const amountNight =
@@ -124,9 +151,9 @@ export const BanyaPage = () => {
             label={`День · ${MONTHS[month - 1]}`}
             value={totals.energyDay}
             unit="кВт·ч"
-            caption={`Тариф ${FormatNumber(
-              context.dayRate
-            )} ₴ · ${FormatNumber(amountDay)} ₴`}
+            caption={`Тариф ${FormatNumber(context.dayRate)} ₴ · ${FormatNumber(
+              amountDay
+            )} ₴`}
             accent={palette.day}
           />
           <StatTile
@@ -150,7 +177,7 @@ export const BanyaPage = () => {
         </Stack>
 
         <SectionCard
-          title="Счётчик бани"
+          title={meterTitle}
           subtitle="Показание запрашивается у openhab по MQTT"
           actions={
             <Button
@@ -165,11 +192,11 @@ export const BanyaPage = () => {
             </Button>
           }
         >
-          <Table aria-label="Показание счётчика бани">
+          <Table aria-label={meterTitle}>
             <TableBody>
               <TableRow hover>
                 <RowLabelCell accent={palette.primary}>
-                  Автомат Баня
+                  {meterLabel}
                 </RowLabelCell>
                 <TextCell>{currentAt}</TextCell>
                 <ValueCell value={current ?? '—'} unit="кВт·ч" strong />
@@ -179,9 +206,9 @@ export const BanyaPage = () => {
         </SectionCard>
 
         <ConsumptionCalendar
-          device="dinSmartRelay"
-          title="Календарь потребления бани"
-          subtitle="Посуточный расход счётчика бани с разбивкой на день и ночь"
+          device={device}
+          title={calendarTitle}
+          subtitle="Посуточный расход с разбивкой на день и ночь"
         />
       </Stack>
     </Container>

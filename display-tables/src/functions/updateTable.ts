@@ -7,7 +7,11 @@ import { getDaysResponse } from '../api/mqttResponse';
 import { WaitForDaysResponse } from './waitForMqttResponse';
 
 /** Устройства, посуточную историю которых добираем у openhab. */
-export const TRACKED_DEVICES = ['inputCircuitBreaker', 'dinSmartRelay'];
+export const TRACKED_DEVICES = [
+  'inputCircuitBreaker',
+  'dinSmartRelay',
+  'smartPlug1Energy',
+];
 
 /**
  * Ответ openhab не содержит имени устройства — бэкенд привязывает пришедшие дни

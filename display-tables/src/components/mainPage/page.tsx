@@ -18,7 +18,7 @@ import { GettingReadingsForDateAndTimeDialog } from '../dialog/gettingReadingsFo
 import { SectionCard } from '../ui/sectionCard';
 import { ConsumptionCalendar } from '../calendar/consumptionCalendar';
 import { Summary } from './summary';
-import { BanyaPage } from '../banya/banyaPage';
+import { DevicePage } from '../device/devicePage';
 import { useMainPage } from './mainPageContext';
 
 const BoltIcon = () => (
@@ -135,11 +135,30 @@ export const Page = () => {
           >
             <Tab label="Главная" />
             <Tab label="Баня" />
+            <Tab label="Розетка 1" />
           </Tabs>
         </Container>
       </Box>
 
-      {tab === 1 && <BanyaPage />}
+      {tab === 1 && (
+        <DevicePage
+          device="dinSmartRelay"
+          channel="energy2"
+          meterTitle="Счётчик бани"
+          meterLabel="Автомат Баня"
+          calendarTitle="Календарь потребления бани"
+        />
+      )}
+
+      {tab === 2 && (
+        <DevicePage
+          device="smartPlug1Energy"
+          channel="energy3"
+          meterTitle="Счётчик розетки 1"
+          meterLabel="Розетка1"
+          calendarTitle="Календарь потребления розетки 1"
+        />
+      )}
 
       <Container
         maxWidth="lg"

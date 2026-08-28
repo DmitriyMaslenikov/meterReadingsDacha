@@ -4,9 +4,6 @@ import { WaitForDayAndTimeAllResponse } from './waitForMqttResponse';
 import { AddZero } from './addZero';
 import { GetDateStr } from './getDateStr';
 
-/** Канал прибора в ответе /energy/responseDayAndTimeAll. */
-export const CHANNEL_BANYA = 'energy2';
-
 export const TimeStr = (date: Date) =>
   `${AddZero(date.getHours())}:${AddZero(date.getMinutes())}`;
 
