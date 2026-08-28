@@ -49,6 +49,7 @@ export const DevicePage = ({
   meterTitle,
   meterLabel,
   calendarTitle,
+  factor = 1,
 }: {
   /** Имя устройства для /energy/days и фильтра в базе. */
   device: string;
@@ -57,6 +58,8 @@ export const DevicePage = ({
   meterTitle: string;
   meterLabel: string;
   calendarTitle: string;
+  /** Множитель единиц: некоторые счётчики отдают ватт-часы. */
+  factor?: number;
 }) => {
   const context = useMainPage();
   const now = new Date();
@@ -83,7 +86,7 @@ export const DevicePage = ({
       if (value === null) {
         setError('Прибор не ответил на запрос текущего показания.');
       } else {
-        setCurrent(value);
+        setCurrent(value * factor);
         setCurrentAt(`${moment.date} ${moment.time}`);
       }
     } catch (requestError: any) {
@@ -99,13 +102,13 @@ export const DevicePage = ({
 
   useEffect(() => {
     LoadCurrent();
-  }, [device]);
+  }, [device, factor]);
 
   // Итоги текущего месяца для плиток — те же расчёты, что и в календаре.
   useEffect(() => {
     let actual = true;
 
-    LoadEnergyReadings(year, month, device)
+    LoadEnergyReadings(year, month, device, factor)
       .then((readings) => {
         if (!actual) {
           return;
@@ -130,6 +133,7 @@ export const DevicePage = ({
     };
   }, [
     device,
+    factor,
     year,
     month,
     context.dayRate,
@@ -207,6 +211,7 @@ export const DevicePage = ({
 
         <ConsumptionCalendar
           device={device}
+          factor={factor}
           title={calendarTitle}
           subtitle="Посуточный расход с разбивкой на день и ночь"
         />

@@ -46,7 +46,9 @@ export const FirstWeekdayOfMonth = (year: number, month: number) =>
 export const LoadEnergyReadings = async (
   year: number,
   month: number,
-  device = 'inputCircuitBreaker'
+  device = 'inputCircuitBreaker',
+  /** Множитель единиц: часть счётчиков отдаёт ватт-часы вместо киловатт-часов. */
+  factor = 1
 ) => {
   const dayStart = DateStr(year, month, 1);
   const nextMonth = month === 12 ? 1 : month + 1;
@@ -59,8 +61,8 @@ export const LoadEnergyReadings = async (
   const readings = new Map<string, EnergyReading>();
   rows.forEach((row) => {
     readings.set(row.day, {
-      energyDay: Number(row.energyDay),
-      energyNight: Number(row.energyNight),
+      energyDay: Number(row.energyDay) * factor,
+      energyNight: Number(row.energyNight) * factor,
     });
   });
 

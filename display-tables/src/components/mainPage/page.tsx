@@ -136,6 +136,7 @@ export const Page = () => {
             <Tab label="Главная" />
             <Tab label="Баня" />
             <Tab label="Розетка 1" />
+            <Tab label="Розетка 2" />
           </Tabs>
         </Container>
       </Box>
@@ -157,6 +158,17 @@ export const Page = () => {
           meterTitle="Счётчик розетки 1"
           meterLabel="Розетка1"
           calendarTitle="Календарь потребления розетки 1"
+        />
+      )}
+
+      {tab === 3 && (
+        <DevicePage
+          device="smartPlug2Energy"
+          channel="energy4"
+          meterTitle="Счётчик розетки 2"
+          meterLabel="Розетка2"
+          calendarTitle="Календарь потребления розетки 2"
+          factor={0.001}
         />
       )}
 

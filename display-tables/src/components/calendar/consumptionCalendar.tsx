@@ -214,10 +214,12 @@ export const ConsumptionCalendar = ({
   device = 'inputCircuitBreaker',
   title = 'Календарь потребления',
   subtitle = 'Посуточный расход и стоимость с разбивкой на день и ночь',
+  factor = 1,
 }: {
   device?: string;
   title?: string;
   subtitle?: string;
+  factor?: number;
 } = {}) => {
   const context = useMainPage();
   const now = new Date();
@@ -235,7 +237,7 @@ export const ConsumptionCalendar = ({
     setLoading(true);
     setError('');
 
-    LoadEnergyReadings(year, month, device)
+    LoadEnergyReadings(year, month, device, factor)
       .then((loaded) => {
         if (actual) {
           setReadings(loaded);
@@ -260,7 +262,7 @@ export const ConsumptionCalendar = ({
     return () => {
       actual = false;
     };
-  }, [year, month, device, context.dataVersion]);
+  }, [year, month, device, factor, context.dataVersion]);
 
   const days = useMemo(
     () =>

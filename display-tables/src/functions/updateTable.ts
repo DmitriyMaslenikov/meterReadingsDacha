@@ -11,6 +11,7 @@ export const TRACKED_DEVICES = [
   'inputCircuitBreaker',
   'dinSmartRelay',
   'smartPlug1Energy',
+  'smartPlug2Energy',
 ];
 
 /**
