@@ -12,6 +12,7 @@ export const TRACKED_DEVICES = [
   'dinSmartRelay',
   'smartPlug1Energy',
   'smartPlug2Energy',
+  'smartPlug3Energy',
 ];
 
 /**
