@@ -140,6 +140,8 @@ export const Page = () => {
             <Tab label="Розетка 3" />
             <Tab label="Спальня" />
             <Tab label="Кухня" />
+            <Tab label="Верх" />
+            <Tab label="Зал" />
           </Tabs>
         </Container>
       </Box>
@@ -203,6 +205,26 @@ export const Page = () => {
           meterTitle="Обогрев кухни"
           meterLabel="Реле обогрева кухня"
           calendarTitle="Календарь потребления обогрева кухни"
+        />
+      )}
+
+      {tab === 7 && (
+        <DevicePage
+          device="heatingRelayTopEnergy"
+          channel="energy8"
+          meterTitle="Обогрев верха"
+          meterLabel="Реле обогрева верх"
+          calendarTitle="Календарь потребления обогрева верха"
+        />
+      )}
+
+      {tab === 8 && (
+        <DevicePage
+          device="hallHeatingRelayEnergy"
+          channel="energy9"
+          meterTitle="Обогрев зала"
+          meterLabel="Реле обогрева зал"
+          calendarTitle="Календарь потребления обогрева зала"
         />
       )}
 
