@@ -7,9 +7,11 @@ import { EnergyMetersReadingsController } from './energyMetersReadings.controlle
 import { EnergysMqttService } from './energys.mqtt.service';
 import { EnergysMqttController } from './energy.mqtt.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { InputCircuitBreakerEnergysModule } from '../inputCircuitBreakerEnergy/inputCircuitBreakerEnergys.module';
 
 @Module({
   imports: [
+    InputCircuitBreakerEnergysModule,
     TypeOrmModule.forFeature([EnergyMetersReadings]),
     ClientsModule.register([
       {

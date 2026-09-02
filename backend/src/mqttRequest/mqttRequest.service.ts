@@ -10,14 +10,14 @@ import {
   ClientProxy,
 } from '@nestjs/microservices';
 import { Observable } from 'rxjs/internal/Observable';
-import { LastRequestedDeviceService } from '../mqttResponse/lastRequestedDevice.service';
+import { PendingDeviceRequestService } from '../mqttResponse/pendingDeviceRequest.service';
 
 @Injectable()
 export class MqttRequestService {
   constructor(
     // private readonly EnergysMqttService: EnergysMqttService,
     @Inject('MQTT_SERVICE') private client: ClientProxy,
-    private readonly lastRequestedDevice: LastRequestedDeviceService,
+    private readonly pendingDeviceRequest: PendingDeviceRequestService,
   ) {}
 
   async publish(data) {
@@ -35,7 +35,7 @@ export class MqttRequestService {
 
       case '/energy/days':
         payload = `{ "startDay":"${data.dateStart}", "endDay":"${data.dateAnd}", "device": "${data.device}" , "time": "${data.time}"}`;
-        this.lastRequestedDevice.set(data.device);
+        this.pendingDeviceRequest.start(data.device);
         break;
     }
     const pattern = data.topic;

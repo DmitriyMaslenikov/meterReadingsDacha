@@ -19,6 +19,7 @@ import { SectionCard } from '../ui/sectionCard';
 import { ConsumptionCalendar } from '../calendar/consumptionCalendar';
 import { Summary } from './summary';
 import { DevicePage } from '../device/devicePage';
+import { DEVICES } from '../../functions/devices';
 import { useMainPage } from './mainPageContext';
 
 const BoltIcon = () => (
@@ -134,97 +135,22 @@ export const Page = () => {
             sx={{ minHeight: 40, '& .MuiTab-root': { minHeight: 40 } }}
           >
             <Tab label="Главная" />
-            <Tab label="Баня" />
-            <Tab label="Розетка 1" />
-            <Tab label="Розетка 2" />
-            <Tab label="Розетка 3" />
-            <Tab label="Спальня" />
-            <Tab label="Кухня" />
-            <Tab label="Верх" />
-            <Tab label="Зал" />
+            {DEVICES.map((item) => (
+              <Tab key={item.device} label={item.tabLabel} />
+            ))}
           </Tabs>
         </Container>
       </Box>
 
-      {tab === 1 && (
+      {tab > 0 && DEVICES[tab - 1] && (
         <DevicePage
-          device="dinSmartRelay"
-          channel="energy2"
-          meterTitle="Счётчик бани"
-          meterLabel="Автомат Баня"
-          calendarTitle="Календарь потребления бани"
-        />
-      )}
-
-      {tab === 2 && (
-        <DevicePage
-          device="smartPlug1Energy"
-          channel="energy3"
-          meterTitle="Счётчик розетки 1"
-          meterLabel="Розетка1"
-          calendarTitle="Календарь потребления розетки 1"
-        />
-      )}
-
-      {tab === 3 && (
-        <DevicePage
-          device="smartPlug2Energy"
-          channel="energy4"
-          meterTitle="Счётчик розетки 2"
-          meterLabel="Розетка2"
-          calendarTitle="Календарь потребления розетки 2"
-          factor={0.001}
-        />
-      )}
-
-      {tab === 4 && (
-        <DevicePage
-          device="smartPlug3Energy"
-          channel="energy5"
-          meterTitle="Счётчик розетки 3"
-          meterLabel="Розетка 3"
-          calendarTitle="Календарь потребления розетки 3"
-          factor={0.001}
-        />
-      )}
-
-      {tab === 5 && (
-        <DevicePage
-          device="bedroomHeatingRelayEnergy"
-          channel="energy6"
-          meterTitle="Обогрев спальни"
-          meterLabel="Реле обогрева спальня"
-          calendarTitle="Календарь потребления обогрева спальни"
-        />
-      )}
-
-      {tab === 6 && (
-        <DevicePage
-          device="kitchenHeatingRelayEnergy"
-          channel="energy7"
-          meterTitle="Обогрев кухни"
-          meterLabel="Реле обогрева кухня"
-          calendarTitle="Календарь потребления обогрева кухни"
-        />
-      )}
-
-      {tab === 7 && (
-        <DevicePage
-          device="heatingRelayTopEnergy"
-          channel="energy8"
-          meterTitle="Обогрев верха"
-          meterLabel="Реле обогрева верх"
-          calendarTitle="Календарь потребления обогрева верха"
-        />
-      )}
-
-      {tab === 8 && (
-        <DevicePage
-          device="hallHeatingRelayEnergy"
-          channel="energy9"
-          meterTitle="Обогрев зала"
-          meterLabel="Реле обогрева зал"
-          calendarTitle="Календарь потребления обогрева зала"
+          key={DEVICES[tab - 1].device}
+          device={DEVICES[tab - 1].device}
+          channel={DEVICES[tab - 1].channel}
+          meterTitle={DEVICES[tab - 1].meterTitle}
+          meterLabel={DEVICES[tab - 1].meterLabel}
+          calendarTitle={DEVICES[tab - 1].calendarTitle}
+          factor={DEVICES[tab - 1].factor}
         />
       )}
 

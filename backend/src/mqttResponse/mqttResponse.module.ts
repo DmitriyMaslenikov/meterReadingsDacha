@@ -1,12 +1,12 @@
 import { Global, Module } from '@nestjs/common';
 import { MqttResponseService } from './mqttResponse.service';
 import { MqttResponseController } from './mqttResponse.controller';
-import { LastRequestedDeviceService } from './lastRequestedDevice.service';
+import { PendingDeviceRequestService } from './pendingDeviceRequest.service';
 
 @Global()
 @Module({
-  providers: [MqttResponseService, LastRequestedDeviceService],
+  providers: [MqttResponseService, PendingDeviceRequestService],
   controllers: [MqttResponseController],
-  exports: [MqttResponseService, LastRequestedDeviceService],
+  exports: [MqttResponseService, PendingDeviceRequestService],
 })
 export class MqttResponseModule {}

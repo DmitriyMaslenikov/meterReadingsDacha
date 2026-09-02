@@ -49,7 +49,7 @@ export const DevicePage = ({
   meterTitle,
   meterLabel,
   calendarTitle,
-  factor = 1,
+  factor: factorProp,
 }: {
   /** Имя устройства для /energy/days и фильтра в базе. */
   device: string;
@@ -62,6 +62,7 @@ export const DevicePage = ({
   factor?: number;
 }) => {
   const context = useMainPage();
+  const factor = factorProp ?? 1;
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;

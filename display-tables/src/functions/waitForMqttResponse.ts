@@ -29,7 +29,9 @@ const WaitForFreshResponse = async (
 /** Ответ openhab на запрос диапазона дней (/energy/days). */
 export const WaitForDaysResponse = (
   previousReceivedAt: number | null,
-  timeoutMs = 20000,
+  // Ждём заметно дольше, чем отвечает openhab: опоздавший ответ бэкенд
+  // отбросит, то есть цена долгого ожидания — пропуск дня, а не порча серии.
+  timeoutMs = 45000,
   intervalMs = 700
 ) =>
   WaitForFreshResponse(

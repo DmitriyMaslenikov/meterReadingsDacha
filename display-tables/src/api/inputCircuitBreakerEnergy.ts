@@ -34,7 +34,9 @@ export function getInputCircuitBreakerEnergysRange(
     .get(
       `${
         import.meta.env.VITE_BACKEND_URL
-      }/inputCircuitBreakerEnergy?filter=day||$gte||${dayStart}&filter=day||$lte||${dayEnd}&filter=device||$eq||${device}&sort=day,ASC`
+      }/inputCircuitBreakerEnergy?filter=day||$gte||${dayStart}&filter=day||$lte||${dayEnd}${
+        device ? `&filter=device||$eq||${device}` : ''
+      }&sort=day,ASC`
     )
     .then((response) => response.data);
 }

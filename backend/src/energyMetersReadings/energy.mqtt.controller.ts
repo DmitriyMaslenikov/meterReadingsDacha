@@ -1,6 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { EnergysMqttService } from './energys.mqtt.service';
 import { MqttResponseService } from '../mqttResponse/mqttResponse.service';
+import { InputCircuitBreakerEnergysMqttService } from '../inputCircuitBreakerEnergy/inputCircuitBreakerEnergy.mqtt.service';
 import {
   MessagePattern,
   EventPattern,
@@ -16,6 +17,7 @@ export class EnergysMqttController {
     private readonly EnergysMqttService: EnergysMqttService,
     @Inject('MQTT_SERVICE') private client: ClientProxy,
     private readonly mqttResponseService: MqttResponseService,
+    private readonly inputCircuitBreakerEnergysMqttService: InputCircuitBreakerEnergysMqttService,
   ) {}
 
   @MessagePattern('/energy/responseDayAndTime')
@@ -46,5 +48,8 @@ export class EnergysMqttController {
     // Ответ приходит асинхронно, поэтому кладём его в хранилище —
     // браузер забирает его через GET /mqttResponse/dayAndTimeAll.
     this.mqttResponseService.save('/energy/responseDayAndTimeAll', data);
+
+    // Срезы 07:00 и 23:00 — это и есть посуточные показания всех счётчиков.
+    this.inputCircuitBreakerEnergysMqttService.insertSlice(data);
   }
 }
